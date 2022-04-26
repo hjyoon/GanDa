@@ -1,20 +1,14 @@
-import { CssBaseline, Typography, Container, Box, Button } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import { CssBaseline, Container } from '@mui/material';
+import AppHeader from './components/AppHeader';
 
 function App() {
 	return (
 		<>
 			<CssBaseline />
+			<AppHeader />
 			<Container>
-				<Box
-					sx={{
-						display: 'flex',
-						height: '100vh',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					<Typography variant='h4'>Hello World</Typography>
-				</Box>
+				<Outlet />
 			</Container>
 		</>
 	);
