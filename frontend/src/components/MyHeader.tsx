@@ -9,6 +9,7 @@ import {
 	IconButton,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ToggleColorMode from './ToggleColorMode';
 
 function MyHeader() {
 	const navigate = useNavigate();
@@ -29,6 +30,7 @@ function MyHeader() {
 					App
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
+					<ToggleColorMode />
 					<Button sx={{ color: 'white' }} onClick={() => navigate('/first')}>
 						PAGE 1
 					</Button>
