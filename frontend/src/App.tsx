@@ -1,8 +1,17 @@
 import React, { useState, createContext, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Container, CssBaseline, PaletteMode } from '@mui/material';
+import {
+	Stack,
+	Box,
+	Divider,
+	Container,
+	CssBaseline,
+	PaletteMode,
+	Typography,
+} from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MyHeader from './components/MyHeader';
+import Sidebar from './components/Sidebar';
 
 export const StateContext = createContext(null);
 
@@ -31,9 +40,15 @@ function App() {
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<MyHeader />
-				<Container>
-					<Outlet />
-				</Container>
+				<Stack
+					direction="row"
+					divider={<Divider orientation="vertical" flexItem />}
+				>
+					<Sidebar />
+					<Container>
+						<Outlet />
+					</Container>
+				</Stack>
 			</ThemeProvider>
 		</StateContext.Provider>
 	);

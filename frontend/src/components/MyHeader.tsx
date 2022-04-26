@@ -9,6 +9,7 @@ import {
 	IconButton,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 import ToggleColorMode from './ToggleColorMode';
 
 function MyHeader() {
@@ -30,6 +31,9 @@ function MyHeader() {
 					App
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
+					<IconButton color="inherit">
+						<SettingsIcon />
+					</IconButton>
 					<ToggleColorMode />
 					<Button sx={{ color: 'white' }} onClick={() => navigate('/first')}>
 						PAGE 1
