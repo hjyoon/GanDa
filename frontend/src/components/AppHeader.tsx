@@ -31,11 +31,11 @@ function AppHeader() {
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
 					<ToggleColorMode />
-					<Button sx={{ color: 'white' }} onClick={() => navigate('/first')}>
-						PAGE 1
+					<Button sx={{ color: 'white' }} onClick={() => navigate('/')}>
+						UPLOAD
 					</Button>
-					<Button sx={{ color: 'white' }} onClick={() => navigate('/second')}>
-						PAGE 2
+					<Button sx={{ color: 'white' }} onClick={() => navigate('/tuning')}>
+						TUNING
 					</Button>
 				</Box>
 			</Toolbar>

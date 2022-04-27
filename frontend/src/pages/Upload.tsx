@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
 
-function FirstPage() {
+function Upload() {
 	return (
 		<Box
 			sx={{
@@ -17,4 +17,4 @@ function FirstPage() {
 	);
 }
 
-export default FirstPage;
+export default Upload;

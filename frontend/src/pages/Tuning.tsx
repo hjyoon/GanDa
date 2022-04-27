@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
 
-function SecondPage() {
+function Tuning() {
 	return (
 		<Box
 			sx={{
@@ -17,4 +17,4 @@ function SecondPage() {
 	);
 }
 
-export default SecondPage;
+export default Tuning;
