@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
+import FileForm from '../components/FileForm';
 
 function Upload() {
 	return (
@@ -9,10 +10,11 @@ function Upload() {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				height: '100vh',
 			}}
 		>
-			<Typography variant='h5'>이곳은 첫 번째 페이지 입니다.</Typography>
+			<Typography variant='h5'>
+				<FileForm />
+			</Typography>
 		</Box>
 	);
 }
