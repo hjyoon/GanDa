@@ -15,4 +15,9 @@ export interface UploadedFileType extends File {
 	preview?: string;
 }
 
+export interface FileFormPropType {
+	files: Array<UploadedFileType>;
+	setFiles: Function;
+}
+
 export {};

@@ -1,8 +1,12 @@
-import React from 'react';
-import { Box, Button } from '@mui/material';
-import FileForm from '../components/FileForm';
+import { useState } from 'react';
+import { Box } from '@mui/material';
+import FileForm from '../components/upload/FileForm';
+import Preview from '../components/upload/Preview';
+import { UploadedFileType } from '../types';
 
 function Upload() {
+	const [files, setFiles] = useState<Array<UploadedFileType>>([]);
+
 	return (
 		<Box
 			sx={{
@@ -13,8 +17,11 @@ function Upload() {
 				minHeight: '90vh',
 			}}
 		>
-			<FileForm />
-			<Button variant='contained'>이미지 업로드</Button>
+			{files.length === 0 ? (
+				<FileForm files={files} setFiles={setFiles} />
+			) : (
+				<Preview files={files} setFiles={setFiles} />
+			)}
 		</Box>
 	);
 }
