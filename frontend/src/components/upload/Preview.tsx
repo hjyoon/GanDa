@@ -27,12 +27,18 @@ function Preview({ files, setFiles }: FileFormPropType) {
 		setFiles([] as Array<UploadedFileType>);
 	}, []);
 
+	const handleSubmit = () => {
+		// api
+	};
+
 	return (
 		<PreviewContainer>
 			<ImageList sx={{ width: 500 }} cols={3}>
 				{/* <Button variant='contained'>이미지 추가</Button> */}
 				{/* <Button variant='contained' color='error'>이미지 삭제</Button> */}
-				<Button variant='contained'>이미지 생성</Button>
+				<Button variant='contained' onClick={handleSubmit}>
+					이미지 생성
+				</Button>
 				<ImageListItem key='Subheader' cols={3}>
 					<ListSubheader component='div'>
 						전체 삭제하고 다시 업로드
