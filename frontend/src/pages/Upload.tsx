@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import FileForm from '../components/FileForm';
 
 function Upload() {
@@ -10,11 +10,11 @@ function Upload() {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
+				minHeight: '90vh',
 			}}
 		>
-			<Typography variant='h5'>
-				<FileForm />
-			</Typography>
+			<FileForm />
+			<Button variant='contained'>이미지 업로드</Button>
 		</Box>
 	);
 }
