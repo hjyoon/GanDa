@@ -1,6 +1,6 @@
-import { useState, createContext, useMemo, ReactNode } from 'react';
+import { useState, useMemo } from 'react';
 import { PaletteMode } from '@mui/material';
-import { ThemeProvider, createTheme, Theme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { PropType } from './types';
 import { StateContext } from './context';
 

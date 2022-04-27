@@ -11,4 +11,8 @@ export interface ContextType {
 	onEditMode: (mode: PaletteMode) => void;
 }
 
+export interface UploadedFileType extends File {
+	preview?: string;
+}
+
 export {};
