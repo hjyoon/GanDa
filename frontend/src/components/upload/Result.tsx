@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import {
 	Button,
 	CircularProgress,
 	ImageList,
 	ImageListItem,
+	Modal,
+	Paper,
 } from '@mui/material';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
@@ -16,14 +18,36 @@ const PreviewContainer = styled('div')`
 	margin: 20px;
 `;
 
+const ModalBox = styled(Paper)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 400;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 24;
+	padding: 20px;
+	border-radius: 10px;
+`;
+
 function Result({ files, uploadState, setUploadState }: ResultPropType) {
-	const downLoadAsZipFile = () => {
+	const [isZipping, setZipping] = useState<boolean>(false);
+	const downloadAsZipFile = async () => {
+		setZipping(true);
+
 		const zip = new JSZip();
-		const folder = zip.folder('images');
+		const date = new Date().toJSON();
+		const folder = zip.folder(`results ${date}`);
+
 		files.forEach((file, idx) => folder?.file(`image${idx}.jpg`, file));
-		zip
+		await zip
 			.generateAsync({ type: 'blob' })
-			.then(res => FileSaver(res, 'results.zip'));
+			.then(res => FileSaver(res, `results ${date}.zip`));
+
+		setZipping(false);
 	};
 	const contents = useMemo(() => {
 		if (uploadState === 'generating') {
@@ -40,7 +64,7 @@ function Result({ files, uploadState, setUploadState }: ResultPropType) {
 					<Button variant='contained' onClick={() => setUploadState('upload')}>
 						돌아가기
 					</Button>
-					<Button onClick={() => downLoadAsZipFile()}>Down</Button>
+					<Button onClick={() => downloadAsZipFile()}>다운로드</Button>
 					<PreviewContainer>
 						<ImageList sx={{ width: 500 }} cols={3}>
 							{files.map((file: any) => (
@@ -50,11 +74,17 @@ function Result({ files, uploadState, setUploadState }: ResultPropType) {
 							))}
 						</ImageList>
 					</PreviewContainer>
+					<Modal open={isZipping}>
+						<ModalBox>
+							<p>파일 압축 중...</p>
+							<CircularProgress size={50} />
+						</ModalBox>
+					</Modal>
 				</>
 			);
 		}
 		return null;
-	}, [uploadState]);
+	}, [uploadState, isZipping]);
 
 	return contents;
 }
