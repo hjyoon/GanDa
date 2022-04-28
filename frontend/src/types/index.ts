@@ -18,6 +18,11 @@ export interface UploadedFileType extends File {
 export interface FileFormPropType {
 	files: Array<UploadedFileType>;
 	setFiles: Function;
+	setUploadState: Function;
 }
 
-export {};
+export interface ResultPropType {
+	files: Array<UploadedFileType>;
+	uploadState: String;
+	setUploadState: Function;
+}

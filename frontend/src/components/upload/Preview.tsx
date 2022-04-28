@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import styled from '@emotion/styled';
 import {
 	Button,
@@ -16,7 +16,7 @@ const PreviewContainer = styled('div')`
 	margin: 20px;
 `;
 
-function Preview({ files, setFiles }: FileFormPropType) {
+function Preview({ files, setFiles, setUploadState }: FileFormPropType) {
 	const handleDeleteFile = useCallback((file: UploadedFileType) => {
 		setFiles((targetFiles: Array<UploadedFileType>) =>
 			targetFiles.filter(e => e.preview !== file.preview)
@@ -29,7 +29,15 @@ function Preview({ files, setFiles }: FileFormPropType) {
 
 	const handleSubmit = () => {
 		// api
+		setUploadState('generating');
+		setTimeout(() => setUploadState('generated'), 3000);
 	};
+
+	useEffect(() => {
+		if (files.length === 0) {
+			setUploadState('upload');
+		}
+	}, [files]);
 
 	return (
 		<PreviewContainer>

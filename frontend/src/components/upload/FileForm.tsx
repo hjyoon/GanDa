@@ -17,7 +17,7 @@ const UploadContainer = styled('div')`
 	margin: 20px;
 `;
 
-function FileForm({ files, setFiles }: FileFormPropType) {
+function FileForm({ files, setFiles, setUploadState }: FileFormPropType) {
 	const onDrop = useCallback((acceptedFiles: Array<UploadedFileType>) => {
 		files.forEach(file => URL.revokeObjectURL(file.preview || ''));
 		setFiles(
@@ -27,6 +27,7 @@ function FileForm({ files, setFiles }: FileFormPropType) {
 				})
 			)
 		);
+		setUploadState('uploaded');
 	}, []);
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		accept: 'image/*',
