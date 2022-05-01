@@ -1,0 +1,21 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  only:
+    - docker/fe@s06-final/S06P31S106
+  script:
+    - docker-compose build
+  tags:
+    - first
+
+deploy:
+  stage: deploy
+  only:
+    - docker/fe@s06-final/S06P31S106
+  script:
+    - docker-compose up -d
+  tags:
+    - first
