@@ -5,7 +5,7 @@ stages:
 build:
   stage: build
   only:
-    - docker/fe@s06-final/S06P31S106
+    - docker/fe+be@s06-final/S06P31S106
   script:
     - docker-compose build
   tags:
@@ -14,7 +14,7 @@ build:
 deploy:
   stage: deploy
   only:
-    - docker/fe@s06-final/S06P31S106
+    - docker/fe+be@s06-final/S06P31S106
   script:
     - docker-compose up -d
   tags:

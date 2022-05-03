@@ -12,3 +12,13 @@ services:
     volumes:
       - ./docker/nginx/conf/conf.d:/etc/nginx/conf.d
       - ./docker/nginx/cert:/etc/letsencrypt
+    depends_on:
+      - fastapi
+
+  fastapi:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/fastapi/Dockerfile
+    ports:
+      - 8000:8000
