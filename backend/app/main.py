@@ -6,10 +6,13 @@ from os import getcwd
 from PIL import Image
 from typing import List
 import datetime
+import requests
+
 
 app = FastAPI()
 
 PATH_FILES = getcwd() + "/"
+request_url = "http://127.0.0.1:8010/api/gen-image/"
 
 
 def resize_image(filename: str):
@@ -30,18 +33,27 @@ def resize_image(filename: str):
 
 
 @app.post("/upload/file2")
-async def upload_file(background_tasks: BackgroundTasks, in_files: List[UploadFile] = File(...)):
+async def upload_file(background_tasks: BackgroundTasks):
+    # sample output
+    data = requests.get(request_url)
+    
+    with open("static/test.png", "wb") as f:
+        f.write(data.content)
+    
+    '''    
     file_urls = []
     for file in in_files:
-        
         # SAVE FILE ORIGINAL
         with open(PATH_FILES + file.filename, "wb") as myfile:
             content = await file.read()
             myfile.write(content)
             myfile.close()
-
         # RESIZE IMAGES
         background_tasks.add_task(resize_image, filename=file.filename)
         file_urls.append(PATH_FILES + file.filename)
+    '''
+    
+    return FileResponse("static/test.png")
+    # return JSONResponse(data.json())
     # return FileResponse(file_urls[0])
-    return JSONResponse(content={"message": file_urls})
+    # return JSONResponse(content={"message": file_urls})
