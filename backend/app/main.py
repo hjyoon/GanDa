@@ -12,7 +12,8 @@ import requests
 app = FastAPI()
 
 PATH_FILES = getcwd() + "/"
-request_url = "http://127.0.0.1:8010/api/gen-image/"
+BASE_URL = "http://k6s106.p.ssafy.io:8010/"
+image_generation = "api/gen-image/"
 
 
 def resize_image(filename: str):
@@ -32,10 +33,15 @@ def resize_image(filename: str):
     print("success")
 
 
-@app.post("/upload/file2")
+@app.post("/upload/file2/")
 async def upload_file(background_tasks: BackgroundTasks):
+    url = f"{BASE_URL}{image_generation}"
+    
+    if not os.path.exists("static"):
+        os.mkdir("static")
+    
     # sample output
-    data = requests.get(request_url)
+    data = requests.get(url)
     
     with open("static/test.png", "wb") as f:
         f.write(data.content)
