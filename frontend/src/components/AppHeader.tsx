@@ -38,11 +38,11 @@ function AppHeader() {
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
 					<ToggleColorMode />
 					<Button sx={{ color: 'white' }} onClick={() => navigate('/generate')}>
-						UPLOAD
+						GENERATE
 					</Button>
-					<Button sx={{ color: 'white' }} onClick={() => navigate('/tuning')}>
+					{/* <Button sx={{ color: 'white' }} onClick={() => navigate('/tuning')}>
 						TUNING
-					</Button>
+					</Button> */}
 				</Box>
 			</Toolbar>
 		</AppBar>
