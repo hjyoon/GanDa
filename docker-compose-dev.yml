@@ -1,0 +1,23 @@
+version: "3.1"
+
+services:
+  nginx:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile-dev
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx/conf-dev/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/cert:/etc/letsencrypt
+    depends_on:
+      - fastapi
+
+  fastapi:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/fastapi/Dockerfile
+    ports:
+      - 8000:8000
