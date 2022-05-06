@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import { Button, Container, ImageList, ImageListItem } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -47,6 +47,70 @@ function Generation() {
 	const [mainImage, setMainImage] = useState<UploadedFileType>();
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 
+	const changeMainImage = useCallback((image: UploadedFileType) => {
+		setMainImage(image);
+	}, []);
+
+	const genImage = useCallback(async () => {
+		try {
+			// api
+			const newImage = {} as UploadedFileType;
+			Object.assign(newImage, {
+				preview: URL.createObjectURL(newImage),
+			});
+			setMainImage(newImage);
+			setSubImages(oldImages => oldImages.concat([newImage]));
+		} catch (e) {
+			// error
+		}
+	}, []);
+
+	const mainContent = useMemo(
+		() => (
+			<MainImageContainer>
+				{mainImage && <img src={mainImage.preview} alt='no img...' />}
+			</MainImageContainer>
+		),
+		[mainImage]
+	);
+
+	const subContent = useMemo(
+		() => (
+			<SubImageContainer>
+				<ArrowBackIosIcon />
+				<SubImageList sx={{ width: 300 }} cols={4}>
+					<ImageListItem>
+						<img
+							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+							alt=''
+						/>
+					</ImageListItem>
+					<ImageListItem>
+						<img
+							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+							alt=''
+						/>
+					</ImageListItem>
+					<ImageListItem>
+						<img
+							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+							alt=''
+						/>
+					</ImageListItem>
+					<ImageListItem>
+						<img
+							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+							alt=''
+						/>
+					</ImageListItem>
+					{/* gened Image list */}
+				</SubImageList>
+				<ArrowForwardIosIcon />
+			</SubImageContainer>
+		),
+		[subImages]
+	);
+
 	return (
 		<Divider>
 			<ImageList cols={2}>{/* model list */}</ImageList>
@@ -59,42 +123,8 @@ function Generation() {
 				}}
 			>
 				<Title>Generate Images</Title>
-				<MainImageContainer>
-					{mainImage && <img src={mainImage.preview} alt='no img...' />}
-				</MainImageContainer>
-				{subImages && (
-					<SubImageContainer>
-						<ArrowBackIosIcon />
-						<SubImageList sx={{ width: 300 }} cols={4}>
-							<ImageListItem>
-								<img
-									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-									alt=''
-								/>
-							</ImageListItem>
-							<ImageListItem>
-								<img
-									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-									alt=''
-								/>
-							</ImageListItem>
-							<ImageListItem>
-								<img
-									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-									alt=''
-								/>
-							</ImageListItem>
-							<ImageListItem>
-								<img
-									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-									alt=''
-								/>
-							</ImageListItem>
-							{/* gened Image list */}
-						</SubImageList>
-						<ArrowForwardIosIcon />
-					</SubImageContainer>
-				)}
+				{mainContent}
+				{subImages && subContent}
 				<ButtonContainer>
 					<Button variant='contained'>Get New Image</Button>
 					<Button variant='contained'>Download</Button>

@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
-import { Container, ImageList, Button } from '@mui/material';
+import {
+	Container,
+	ImageList,
+	Button,
+	Divider as ContentDivider,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Divider from '../components/common/Divider';
 
@@ -35,9 +40,11 @@ function Main() {
 					flexDirection: 'column',
 					justifyContent: 'center',
 					alignItems: 'end',
+					paddingRight: '50px',
 				}}
 			>
 				<Title>Gan-Da</Title>
+				<ContentDivider sx={{ width: '100%', marginBottom: 2 }} />
 				<Content>Have your Own Animal Image</Content>
 				<Content>Get Unique Image by using GAN</Content>
 				<ButtonContainer>
