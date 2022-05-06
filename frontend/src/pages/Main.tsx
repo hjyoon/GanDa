@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Container, ImageList, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Divider from '../components/common/Divider';
 
 const Title = styled('span')`
@@ -24,6 +25,7 @@ const ButtonContainer = styled('div')`
 `;
 
 function Main() {
+	const navigate = useNavigate();
 	return (
 		<Divider>
 			<ImageList cols={2}>{/* files */}</ImageList>
@@ -39,7 +41,9 @@ function Main() {
 				<Content>Have your Own Animal Image</Content>
 				<Content>Get Unique Image by using GAN</Content>
 				<ButtonContainer>
-					<Button variant='contained'>Generate</Button>
+					<Button variant='contained' onClick={() => navigate('/generate')}>
+						Generate
+					</Button>
 					{/* <Button variant='contained'>Do something</Button> */}
 				</ButtonContainer>
 			</Container>
