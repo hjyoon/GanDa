@@ -1,5 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from '@emotion/styled';
 import {
 	Typography,
 	AppBar,
@@ -11,13 +12,18 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 
+const SLink = styled(Link)`
+	text-decoration: none;
+	color: inherit;
+`;
+
 function AppHeader() {
 	const navigate = useNavigate();
 
 	return (
 		<AppBar position='sticky'>
 			<Toolbar variant='dense'>
-				<IconButton
+				{/* <IconButton
 					size='large'
 					edge='start'
 					color='inherit'
@@ -25,13 +31,13 @@ function AppHeader() {
 					sx={{ mr: 2 }}
 				>
 					<MenuIcon />
-				</IconButton>
+				</IconButton> */}
 				<Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-					App
+					<SLink to='/'>GanD</SLink>
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
 					<ToggleColorMode />
-					<Button sx={{ color: 'white' }} onClick={() => navigate('/')}>
+					<Button sx={{ color: 'white' }} onClick={() => navigate('/generate')}>
 						UPLOAD
 					</Button>
 					<Button sx={{ color: 'white' }} onClick={() => navigate('/tuning')}>
