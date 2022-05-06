@@ -1,55 +1,107 @@
 import { useMemo, useState } from 'react';
-import { Box } from '@mui/material';
+import styled from '@emotion/styled';
+import { Button, Container, ImageList, ImageListItem } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import Divider from '../components/common/Divider';
 import { UploadedFileType } from '../types';
-import FileForm from '../components/upload/FileForm';
-import Preview from '../components/upload/Preview';
-import Result from '../components/upload/Result';
 
-function Upload() {
-	const [files, setFiles] = useState<Array<UploadedFileType>>([]);
-	const [uploadState, setUploadState] = useState<string>('upload');
+const Title = styled('span')`
+	font-weight: 600;
+	font-size: 48px;
+`;
 
-	const contents = useMemo(() => {
-		if (uploadState === 'upload') {
-			return (
-				<FileForm
-					files={files}
-					setFiles={setFiles}
-					setUploadState={setUploadState}
-				/>
-			);
-		}
-		if (uploadState === 'uploaded') {
-			return (
-				<Preview
-					files={files}
-					setFiles={setFiles}
-					setUploadState={setUploadState}
-				/>
-			);
-		}
-		return (
-			<Result
-				files={files}
-				uploadState={uploadState}
-				setUploadState={setUploadState}
-			/>
-		);
-	}, [uploadState, files]);
+const MainImageContainer = styled('div')`
+	height: 256px;
+	width: 256px;
+	margin: 30px;
+	background-color: #bbbbbb;
+	border: 1px solid black;
+
+	img {
+		height: 256px;
+		width: 256px;
+	}
+`;
+
+const SubImageContainer = styled('div')`
+	display: flex;
+	align-items: center;
+`;
+
+const SubImageList = styled(ImageList)`
+	margin: 10px;
+`;
+
+const ButtonContainer = styled('div')`
+	display: flex;
+	flex-direction: column;
+
+	button {
+		margin-top: 20px;
+		width: 300px;
+	}
+`;
+
+function Generation() {
+	const [mainImage, setMainImage] = useState<UploadedFileType>();
+	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-				minHeight: '90vh',
-			}}
-		>
-			{contents}
-		</Box>
+		<Divider>
+			<ImageList cols={2}>{/* model list */}</ImageList>
+			<Container
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				<Title>Generate Images</Title>
+				<MainImageContainer>
+					{mainImage && <img src={mainImage.preview} alt='no img...' />}
+				</MainImageContainer>
+				{subImages && (
+					<SubImageContainer>
+						<ArrowBackIosIcon />
+						<SubImageList sx={{ width: 300 }} cols={4}>
+							<ImageListItem>
+								<img
+									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+									alt=''
+								/>
+							</ImageListItem>
+							<ImageListItem>
+								<img
+									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+									alt=''
+								/>
+							</ImageListItem>
+							<ImageListItem>
+								<img
+									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+									alt=''
+								/>
+							</ImageListItem>
+							<ImageListItem>
+								<img
+									src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
+									alt=''
+								/>
+							</ImageListItem>
+							{/* gened Image list */}
+						</SubImageList>
+						<ArrowForwardIosIcon />
+					</SubImageContainer>
+				)}
+				<ButtonContainer>
+					<Button variant='contained'>Get New Image</Button>
+					<Button variant='contained'>Download</Button>
+				</ButtonContainer>
+			</Container>
+		</Divider>
 	);
 }
 
-export default Upload;
+export default Generation;
