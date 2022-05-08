@@ -22,7 +22,7 @@ function AppHeader() {
 
 	return (
 		<AppBar position='sticky'>
-			<Toolbar variant='dense'>
+			<Toolbar sx={{ height: '64px' }}>
 				{/* <IconButton
 					size='large'
 					edge='start'
@@ -32,7 +32,7 @@ function AppHeader() {
 				>
 					<MenuIcon />
 				</IconButton> */}
-				<Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+				<Typography variant='h4' component='div' sx={{ flexGrow: 1 }}>
 					<SLink to='/'>GanD</SLink>
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>

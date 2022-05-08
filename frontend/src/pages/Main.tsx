@@ -4,9 +4,11 @@ import {
 	ImageList,
 	Button,
 	Divider as ContentDivider,
+	ImageListItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Divider from '../components/common/Divider';
+import sample1 from '../assets/sample1.png';
 
 const Wrapper = styled('div')`
 	display: flex;
@@ -43,7 +45,15 @@ function Main() {
 	const navigate = useNavigate();
 	return (
 		<Divider>
-			<ImageList cols={2}>{/* files */}</ImageList>
+			<ImageList cols={3} gap={8} sx={{ padding: '50px' }}>
+				{Array(9)
+					.fill(null)
+					.map(_ => (
+						<ImageListItem key={Math.random()}>
+							<img src={sample1} alt='' />
+						</ImageListItem>
+					))}
+			</ImageList>
 			<Container
 				sx={{
 					display: 'flex',
