@@ -15,7 +15,7 @@ const MainImageContainer = styled('div')`
 	height: 256px;
 	width: 256px;
 	margin: 30px;
-	background-color: #bbbbbb;
+	background-color: #ddd;
 	border: 1px solid black;
 
 	img {
