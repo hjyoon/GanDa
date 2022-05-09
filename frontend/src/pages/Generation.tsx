@@ -2,16 +2,23 @@ import { useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import {
 	Button,
+	Card,
+	CardActionArea,
+	CardContent,
+	CardMedia,
 	Container,
 	IconButton,
 	ImageList,
 	ImageListItem,
+	Typography,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Divider from '../components/common/Divider';
 import { UploadedFileType } from '../types';
 import { apiGetGan } from '../api';
+import sample from '../assets/sample';
+import ScrollableContainer from '../components/common/ScrollableContainer';
 
 const Title = styled('span')`
 	font-weight: 600;
@@ -130,7 +137,25 @@ function Generation() {
 
 	return (
 		<Divider>
-			<ImageList cols={2}>{/* model list */}</ImageList>
+			<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
+				<ImageList cols={3} gap={8}>
+					{sample.map(img => (
+						<Card key={img}>
+							<CardActionArea>
+								<CardMedia component='img' height='200' image={img} alt='' />
+								<CardContent>
+									<Typography gutterBottom variant='h5' component='div'>
+										Lorem
+									</Typography>
+									<Typography variant='body2' color='text.secondary'>
+										Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+									</Typography>
+								</CardContent>
+							</CardActionArea>
+						</Card>
+					))}
+				</ImageList>
+			</ScrollableContainer>
 			<Container
 				sx={{
 					display: 'flex',
