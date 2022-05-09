@@ -1,10 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
-import { Button, Container, ImageList, ImageListItem } from '@mui/material';
+import {
+	Button,
+	Container,
+	IconButton,
+	ImageList,
+	ImageListItem,
+} from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Divider from '../components/common/Divider';
 import { UploadedFileType } from '../types';
+import { apiGetGan } from '../api';
 
 const Title = styled('span')`
 	font-weight: 600;
@@ -33,6 +40,13 @@ const SubImageList = styled(ImageList)`
 	margin: 10px;
 `;
 
+const SubDummy = styled('div')`
+	background-color: #ddd;
+	border: 1px solid black;
+	width: 72px;
+	height: 72px;
+`;
+
 const ButtonContainer = styled('div')`
 	display: flex;
 	flex-direction: column;
@@ -46,23 +60,29 @@ const ButtonContainer = styled('div')`
 function Generation() {
 	const [mainImage, setMainImage] = useState<UploadedFileType>();
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
+	const [page, setPage] = useState<number>(1);
+	const [isLoading, setLoading] = useState<boolean>(false);
 
 	const changeMainImage = useCallback((image: UploadedFileType) => {
 		setMainImage(image);
 	}, []);
 
-	const genImage = useCallback(async () => {
+	const getImage = useCallback(async () => {
+		setLoading(true);
 		try {
 			// api
+			const response = await apiGetGan();
+			console.log(response);
 			const newImage = {} as UploadedFileType;
 			Object.assign(newImage, {
 				preview: URL.createObjectURL(newImage),
 			});
 			setMainImage(newImage);
-			setSubImages(oldImages => oldImages.concat([newImage]));
+			setSubImages(oldImages => oldImages.concat(newImage));
 		} catch (e) {
 			// error
 		}
+		setLoading(false);
 	}, []);
 
 	const mainContent = useMemo(
@@ -77,35 +97,32 @@ function Generation() {
 	const subContent = useMemo(
 		() => (
 			<SubImageContainer>
-				<ArrowBackIosIcon />
+				<IconButton onClick={() => setPage(page - 1)} disabled={page <= 1}>
+					<ArrowBackIosNewIcon />
+				</IconButton>
 				<SubImageList sx={{ width: 300 }} cols={4}>
-					<ImageListItem>
-						<img
-							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-							alt=''
-						/>
-					</ImageListItem>
-					<ImageListItem>
-						<img
-							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-							alt=''
-						/>
-					</ImageListItem>
-					<ImageListItem>
-						<img
-							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-							alt=''
-						/>
-					</ImageListItem>
-					<ImageListItem>
-						<img
-							src='https://phinf.pstatic.net/contact/20201125_191/1606304847351yz0f4_JPEG/KakaoTalk_20201007_183735541.jpg?type=f130_130'
-							alt=''
-						/>
-					</ImageListItem>
-					{/* gened Image list */}
+					{subImages.slice((page - 1) * 4, page * 4).map(file => (
+						<Button key={file.preview} onClick={() => changeMainImage(file)}>
+							<ImageListItem>
+								<img src={file.preview} alt='' />
+							</ImageListItem>
+						</Button>
+					))}
+					{page * 4 > subImages.length &&
+						Array(page * 4 - subImages.length)
+							.fill(null)
+							.map(_ => (
+								<ImageListItem key={Math.random()}>
+									<SubDummy />
+								</ImageListItem>
+							))}
 				</SubImageList>
-				<ArrowForwardIosIcon />
+				<IconButton
+					onClick={() => setPage(page + 1)}
+					disabled={page >= Math.ceil(subImages.length / 4)}
+				>
+					<ArrowForwardIosIcon />
+				</IconButton>
 			</SubImageContainer>
 		),
 		[subImages]
@@ -126,7 +143,9 @@ function Generation() {
 				{mainContent}
 				{subImages && subContent}
 				<ButtonContainer>
-					<Button variant='contained'>Get New Image</Button>
+					<Button variant='contained' onClick={getImage} disabled={isLoading}>
+						Get New Image
+					</Button>
 					<Button variant='contained'>Download</Button>
 				</ButtonContainer>
 			</Container>

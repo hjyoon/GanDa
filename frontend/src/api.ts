@@ -5,6 +5,6 @@ const api = axios.create({
 	baseURL,
 });
 
-export const apiGetGan = () => api.post('/');
+export const apiGetGan = () => api.post('/upload/file2/');
 
 export const apiTunGan = () => api.post('/');

@@ -33,7 +33,7 @@ function AppHeader() {
 					<MenuIcon />
 				</IconButton> */}
 				<Typography variant='h4' component='div' sx={{ flexGrow: 1 }}>
-					<SLink to='/'>GanD</SLink>
+					<SLink to='/'>GanDa</SLink>
 				</Typography>
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
 					<ToggleColorMode />

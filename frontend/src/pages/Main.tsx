@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Divider from '../components/common/Divider';
-import sample1 from '../assets/sample1.png';
+import sample from '../assets/sample';
 
 const Wrapper = styled('div')`
 	display: flex;
@@ -46,13 +46,11 @@ function Main() {
 	return (
 		<Divider>
 			<ImageList cols={3} gap={8} sx={{ padding: '50px' }}>
-				{Array(9)
-					.fill(null)
-					.map(_ => (
-						<ImageListItem key={Math.random()}>
-							<img src={sample1} alt='' />
-						</ImageListItem>
-					))}
+				{sample.map(img => (
+					<ImageListItem key={Math.random()}>
+						<img src={img} alt='' />
+					</ImageListItem>
+				))}
 			</ImageList>
 			<Container
 				sx={{
