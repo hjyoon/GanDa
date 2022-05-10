@@ -33,7 +33,6 @@ const MainImageContainer = styled('div')`
 	width: 256px;
 	margin: 30px;
 	background-color: #ddd;
-	border: 1px solid black;
 
 	img {
 		height: 256px;
@@ -52,9 +51,9 @@ const SubImageList = styled(ImageList)`
 
 const SubDummy = styled('div')`
 	background-color: #ddd;
-	border: 1px solid black;
-	width: 72px;
-	height: 72px;
+	width: 56px;
+	height: 56px;
+	margin: 6px 8px;
 `;
 
 const ButtonContainer = styled('div')`
@@ -107,7 +106,7 @@ function Generation() {
 	const mainContent = useMemo(
 		() => (
 			<MainImageContainer>
-				{mainImage && <img src={mainImage.preview} alt='' />}
+				{mainImage?.preview && <img src={mainImage.preview} alt='' />}
 			</MainImageContainer>
 		),
 		[mainImage]
@@ -119,7 +118,7 @@ function Generation() {
 				<IconButton onClick={() => setPage(page - 1)} disabled={page <= 1}>
 					<ArrowBackIosNewIcon />
 				</IconButton>
-				<SubImageList sx={{ width: 300 }} cols={4}>
+				<SubImageList sx={{ width: 300, height: 68 }} cols={4}>
 					{subImages.slice((page - 1) * 4, page * 4).map(file => (
 						<Button key={file.preview} onClick={() => changeMainImage(file)}>
 							<ImageListItem>

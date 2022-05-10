@@ -1,10 +1,4 @@
-import {
-	CircularProgress,
-	Divider,
-	Modal,
-	Paper,
-	Typography,
-} from '@mui/material';
+import { CircularProgress, Modal, Paper, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { LoadingPropType } from '../../types';
 
@@ -25,7 +19,7 @@ const ModalBox = styled(Paper)`
 
 function LoadingModal({ isOpen, message }: LoadingPropType) {
 	return (
-		<Modal hideBackdrop open={isOpen} onClose={() => {}}>
+		<Modal open={isOpen}>
 			<ModalBox>
 				<Typography variant='h5' component='div' sx={{ margin: '20px' }}>
 					{message}
