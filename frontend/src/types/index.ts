@@ -26,3 +26,9 @@ export interface ResultPropType {
 	uploadState: String;
 	setUploadState: Function;
 }
+
+export interface DownloadPropType {
+	isShown: boolean;
+	setShown: Function;
+	files: Array<UploadedFileType>;
+}

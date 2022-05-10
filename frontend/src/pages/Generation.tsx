@@ -14,11 +14,13 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import LayersClearIcon from '@mui/icons-material/LayersClear';
 import Divider from '../components/common/Divider';
 import { UploadedFileType } from '../types';
 import { apiGetGan } from '../api';
 import sample from '../assets/sample';
 import ScrollableContainer from '../components/common/ScrollableContainer';
+import DownloadModal from '../components/DownloadModal';
 
 const Title = styled('span')`
 	font-weight: 600;
@@ -69,6 +71,13 @@ function Generation() {
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
+	const [isModalShown, setModalShown] = useState<boolean>(false);
+
+	const init = useCallback(() => {
+		setMainImage({} as UploadedFileType);
+		setSubImages([] as Array<UploadedFileType>);
+		setPage(1);
+	}, []);
 
 	const changeMainImage = useCallback((image: UploadedFileType) => {
 		setMainImage(image);
@@ -95,7 +104,7 @@ function Generation() {
 	const mainContent = useMemo(
 		() => (
 			<MainImageContainer>
-				{mainImage && <img src={mainImage.preview} alt='no img...' />}
+				{mainImage?.preview && <img src={mainImage.preview} alt='' />}
 			</MainImageContainer>
 		),
 		[mainImage]
@@ -136,45 +145,63 @@ function Generation() {
 	);
 
 	return (
-		<Divider>
-			<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
-				<ImageList cols={3} gap={8}>
-					{sample.map(img => (
-						<Card key={img}>
-							<CardActionArea>
-								<CardMedia component='img' height='200' image={img} alt='' />
-								<CardContent>
-									<Typography gutterBottom variant='h5' component='div'>
-										Lorem
-									</Typography>
-									<Typography variant='body2' color='text.secondary'>
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-									</Typography>
-								</CardContent>
-							</CardActionArea>
-						</Card>
-					))}
-				</ImageList>
-			</ScrollableContainer>
-			<Container
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}
-			>
-				<Title>Generate Images</Title>
-				{mainContent}
-				{subImages && subContent}
-				<ButtonContainer>
-					<Button variant='contained' onClick={getImage} disabled={isLoading}>
-						Get New Image
-					</Button>
-					<Button variant='contained'>Download</Button>
-				</ButtonContainer>
-			</Container>
-		</Divider>
+		<>
+			<Divider>
+				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
+					<ImageList cols={3} gap={8}>
+						{sample.map(img => (
+							<Card key={img}>
+								<CardActionArea>
+									<CardMedia component='img' height='200' image={img} alt='' />
+									<CardContent>
+										<Typography gutterBottom variant='h5' component='div'>
+											Lorem
+										</Typography>
+										<Typography variant='body2' color='text.secondary'>
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+										</Typography>
+									</CardContent>
+								</CardActionArea>
+							</Card>
+						))}
+					</ImageList>
+				</ScrollableContainer>
+				<Container
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<Title>
+						Generate Images
+						<IconButton onClick={init} title='목록 초기화'>
+							<LayersClearIcon />
+						</IconButton>
+					</Title>
+					{mainContent}
+					{subImages && subContent}
+					<ButtonContainer>
+						<Button variant='contained' onClick={getImage} disabled={isLoading}>
+							Get New Image
+						</Button>
+						<Button
+							variant='contained'
+							onClick={() => setModalShown(true)}
+							disabled={subImages.length === 0}
+						>
+							Download
+						</Button>
+					</ButtonContainer>
+				</Container>
+			</Divider>
+			<DownloadModal
+				isShown={isModalShown}
+				setShown={setModalShown}
+				files={subImages}
+			/>
+		</>
 	);
 }
 
