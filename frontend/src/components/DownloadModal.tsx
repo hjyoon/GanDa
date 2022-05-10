@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { DownloadPropType, UploadedFileType } from '../types';
 import ScrollableContainer from './common/ScrollableContainer';
+import LoadingModal from './common/LoadingModal';
 
 const ModalBox = styled(Paper)`
 	position: absolute;
@@ -42,16 +43,22 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 	);
 	const [isZipping, setZipping] = useState<boolean>(false);
 	const downloadAsZipFile = useCallback(
-		async (downloadFiles: Array<UploadedFileType>) => {
+		async (
+			downloadFiles: Array<UploadedFileType>,
+			downloadChecked: Array<boolean>
+		) => {
 			setZipping(true);
 
 			const zip = new JSZip();
 			const date = new Date().toJSON();
 			const folder = zip.folder(`results ${date}`);
+			let index = 0;
 
-			downloadFiles.forEach(
-				(file, idx) => isChecked[idx] && folder?.file(`image${idx}.jpg`, file)
-			);
+			downloadFiles.forEach((file, idx) => {
+				if (downloadChecked[idx]) {
+					folder?.file(`image${(index += 1)}.png`, file);
+				}
+			});
 			await zip
 				.generateAsync({ type: 'blob' })
 				.then(res => FileSaver(res, `results ${date}.zip`));
@@ -60,6 +67,9 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 		},
 		[]
 	);
+
+	useEffect(() => setChecked(Array(files.length).fill(false)), [files]);
+
 	return (
 		<Modal open={isShown} onClose={() => setShown(false)}>
 			<ModalBox>
@@ -71,9 +81,9 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 						control={
 							<Checkbox
 								checked={isChecked.every(e => e)}
-								indeterminate={isChecked.some(e => e)}
+								indeterminate={isChecked.some(e => e) && !isChecked.every(e => e)}
 								onChange={() =>
-									isChecked.every(e => e)
+									isChecked.every(e => !e)
 										? setChecked(Array(files.length).fill(true))
 										: setChecked(Array(files.length).fill(false))
 								}
@@ -97,7 +107,7 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 										/>
 									}
 								/>
-								<img src='' alt='' />
+								<img src={file.preview} alt='' />
 							</ImageListItem>
 						))}
 					</ImageList>
@@ -105,11 +115,12 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 				<Button
 					variant='contained'
 					sx={{ width: '100%' }}
-					disabled={isZipping || isChecked.some(e => e)}
-					onClick={() => downloadAsZipFile(files)}
+					disabled={isZipping || !isChecked.some(e => e)}
+					onClick={() => downloadAsZipFile(files, isChecked)}
 				>
 					Download
 				</Button>
+				<LoadingModal isOpen={isZipping} message='압축 중 입니다...' />
 			</ModalBox>
 		</Modal>
 	);

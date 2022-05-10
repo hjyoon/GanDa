@@ -21,6 +21,7 @@ import { apiGetGan } from '../api';
 import sample from '../assets/sample';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
+import LoadingModal from '../components/common/LoadingModal';
 
 const Title = styled('span')`
 	font-weight: 600;
@@ -87,14 +88,16 @@ function Generation() {
 		setLoading(true);
 		try {
 			// api
-			const response = await apiGetGan();
-			console.log(response);
-			const newImage = {} as UploadedFileType;
-			Object.assign(newImage, {
-				preview: URL.createObjectURL(newImage),
+			const { data } = await apiGetGan('1');
+			const file = new File([data], '');
+			Object.assign(file, {
+				preview: URL.createObjectURL(file),
 			});
-			setMainImage(newImage);
-			setSubImages(oldImages => oldImages.concat(newImage));
+			setMainImage(file);
+			setSubImages(oldImages => {
+				setPage(Math.ceil((oldImages.length + 1) / 4));
+				return oldImages.concat(file);
+			});
 		} catch (e) {
 			// error
 		}
@@ -104,7 +107,7 @@ function Generation() {
 	const mainContent = useMemo(
 		() => (
 			<MainImageContainer>
-				{mainImage?.preview && <img src={mainImage.preview} alt='' />}
+				{mainImage && <img src={mainImage.preview} alt='' />}
 			</MainImageContainer>
 		),
 		[mainImage]
@@ -141,7 +144,7 @@ function Generation() {
 				</IconButton>
 			</SubImageContainer>
 		),
-		[subImages]
+		[subImages, page]
 	);
 
 	return (
@@ -201,6 +204,7 @@ function Generation() {
 				setShown={setModalShown}
 				files={subImages}
 			/>
+			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
 		</>
 	);
 }

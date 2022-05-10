@@ -32,3 +32,8 @@ export interface DownloadPropType {
 	setShown: Function;
 	files: Array<UploadedFileType>;
 }
+
+export interface LoadingPropType {
+	isOpen: boolean;
+	message: string;
+}
