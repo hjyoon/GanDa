@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import {
 	Button,
@@ -17,7 +17,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import LayersClearIcon from '@mui/icons-material/LayersClear';
 import Divider from '../components/common/Divider';
 import { UploadedFileType } from '../types';
-import { apiGetGan } from '../api';
+import { apiGetGan, apiGetGanList } from '../api';
 import sample from '../assets/sample';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
@@ -67,13 +67,27 @@ const ButtonContainer = styled('div')`
 `;
 
 function Generation() {
+	const [currentModelId, setCurrentModelId] = useState();
+	const [modeIds, setModeIds] = useState();
 	const [mainImage, setMainImage] = useState<UploadedFileType>();
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
 
-	const init = useCallback(() => {
+	const getGanList = async () => {
+		try {
+			const { data } = await apiGetGanList();
+		} catch (e) {
+			// error
+		}
+	};
+
+	useEffect(() => {
+		getGanList();
+	}, []);
+
+	const initImages = useCallback(() => {
 		setMainImage({} as UploadedFileType);
 		setSubImages([] as Array<UploadedFileType>);
 		setPage(1);
@@ -150,9 +164,9 @@ function Generation() {
 		<>
 			<Divider>
 				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
-					<ImageList cols={3} gap={8}>
+					<ImageList cols={3}>
 						{sample.map(img => (
-							<Card key={img}>
+							<Card key={img} sx={{ margin: '2px' }}>
 								<CardActionArea>
 									<CardMedia component='img' height='200' image={img} alt='' />
 									<CardContent>
@@ -178,7 +192,7 @@ function Generation() {
 				>
 					<Title>
 						Generate Images
-						<IconButton onClick={init} title='목록 초기화'>
+						<IconButton onClick={initImages} title='목록 초기화'>
 							<LayersClearIcon />
 						</IconButton>
 					</Title>

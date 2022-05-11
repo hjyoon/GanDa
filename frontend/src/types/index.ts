@@ -15,18 +15,6 @@ export interface UploadedFileType extends File {
 	preview?: string;
 }
 
-export interface FileFormPropType {
-	files: Array<UploadedFileType>;
-	setFiles: Function;
-	setUploadState: Function;
-}
-
-export interface ResultPropType {
-	files: Array<UploadedFileType>;
-	uploadState: String;
-	setUploadState: Function;
-}
-
 export interface DownloadPropType {
 	isShown: boolean;
 	setShown: Function;

@@ -11,4 +11,6 @@ export const apiGetGan = (dataId: string) =>
 		responseType: 'arraybuffer',
 	});
 
+export const apiGetGanList = () => api.get('/data-list');
+
 export const apiTunGan = () => api.post('/');
