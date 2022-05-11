@@ -75,7 +75,6 @@ async def gen_image(
     if data.status_code == 200:
         with open(f"static/images/{data_id}.png", "wb") as f:
             f.write(data.content)
-        
         return FileResponse(f"static/images/{data_id}.png")
     return Response(status_code=data.status_code)
 
@@ -101,15 +100,13 @@ async def create_data_list(
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
     if not os.path.exists("static/pkls"):
-            os.mkdir("static/pkls")
-
+        os.mkdir("static/pkls")
     img_content = await img.read()
     pkl_content = await pkl_file.read()
     with open(f"static/images/{img.filename}", "wb") as f:
         f.write(img_content)
     with open(f"static/pkls/{pkl_file.filename}", "wb") as f:
         f.write(pkl_content)
-
     files = {
         'img' : (f"{img.filename}", open(f"static/images/{img.filename}",'rb'), f"{img.content_type}"),
         'pkl_file' : (f"{pkl_file.filename}", open(f"static/pkls/{pkl_file.filename}",'rb'), f"{pkl_file.content_type}"),
@@ -118,7 +115,6 @@ async def create_data_list(
         'name' : name,
         'description' : description
     }
-
     url = f"{BASE_URL}{model_url}"
     data = requests.post(url, params=params, files=files)
     if data.status_code == 200:
@@ -137,11 +133,9 @@ async def update_data(
 ):
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
-
     img_content = await img.read()
     with open(f"static/images/{img.filename}", "wb") as f:
         f.write(img_content)
-
     files = {
         'img' : (f"{img.filename}", open(f"static/images/{img.filename}",'rb'), f"{img.content_type}")
     }
@@ -149,7 +143,6 @@ async def update_data(
         'name' : name,
         'description' : description
     }
-
     url = f"{BASE_URL}{model_url}{data_id}/"
     data = requests.patch(url, params=params, files=files)
     if data.status_code == 200:
@@ -163,7 +156,6 @@ async def update_data(
 async def delete_data(
     data_id: int,
 ):
-
     url = f"{BASE_URL}{model_url}{data_id}/"
     data = requests.delete(url)
     if data.status_code == 200:
@@ -178,11 +170,9 @@ async def pkl_rename(
     data_id: str,
     new_name: Optional[str] = None, 
 ):
-
     params = {
         'new_name' : new_name,
     }
-
     url = f"{BASE_URL}{pkl_url}rename/{data_id}/"
     data = requests.patch(url, params=params)
     if data.status_code == 200:
