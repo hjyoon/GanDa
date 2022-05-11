@@ -47,9 +47,8 @@ def resize_image(filename: str):
     print("success")
 
 
-@app.post("/api/gen-image/{data_id}/")
+@app.get("/api/gen-image/{data_id}/")
 async def gen_image(
-    background_tasks: BackgroundTasks,
     data_id: str, 
     count: Optional[int] = 1
 ):
