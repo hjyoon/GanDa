@@ -1,15 +1,18 @@
-from io import BytesIO
+import datetime
 import json
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks
-from fastapi.responses import JSONResponse, FileResponse, Response
-from fastapi.middleware.cors import CORSMiddleware
-
 import os
+import requests
+from typing import Optional
+
+
+from fastapi import FastAPI, UploadFile, BackgroundTasks
+from fastapi.responses import FileResponse, Response
+from fastapi.middleware.cors import CORSMiddleware
 from os import getcwd
 from PIL import Image
-from typing import List, Optional
-import datetime
-import requests
+
+
+import settings
 
 
 app = FastAPI()
@@ -22,11 +25,11 @@ app.add_middleware(
 )
 
 PATH_FILES = getcwd() + "/"
-BASE_URL = "http://k6s106.p.ssafy.io:8010/"
-# BASE_URL = "http://127.0.0.1:8010/"
+BASE_URL = settings.BASE_URL
 image_url = "api/gen-image/"
 model_url = "api/data-list/"
 pkl_url = "api/pkl/"
+
 
 
 def resize_image(filename: str):
@@ -34,12 +37,10 @@ def resize_image(filename: str):
         "width": 256,
         "height": 256
     }]
-
     for size in sizes:
         size_defined = size['width'], size['height']
         currentTime = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         saved_file_name = ''.join([currentTime,'_',filename])
-
         image = Image.open(PATH_FILES + filename, mode="r")
         image.thumbnail(size_defined)
         image.save(PATH_FILES + "static/" + "images/" + str(size['width']) + "X" + str(size['height']) + "_" + saved_file_name)
@@ -47,7 +48,11 @@ def resize_image(filename: str):
 
 
 @app.post("/api/gen-image/{data_id}/")
-async def upload_file(background_tasks: BackgroundTasks, data_id: str, count: Optional[int] = 1):
+async def gen_image(
+    background_tasks: BackgroundTasks,
+    data_id: str, 
+    count: Optional[int] = 1
+):
     '''    
     file_urls = []
     for file in in_files:
@@ -60,14 +65,11 @@ async def upload_file(background_tasks: BackgroundTasks, data_id: str, count: Op
         background_tasks.add_task(resize_image, filename=file.filename)
         file_urls.append(PATH_FILES + file.filename)
     '''
-    
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
-    
     params = {
         'count' : count
     }
-
     url = f"{BASE_URL}{image_url}{data_id}"
     data = requests.get(url, params=params)
     if data.status_code == 200:
@@ -189,10 +191,9 @@ async def pkl_rename(
 
 
 @app.get("/api/pkl/download/{data_id}/")
-def pkl_download(
+async def pkl_download(
     data_id: str,
 ):
-
     url = f"{BASE_URL}{pkl_url}download/{data_id}/"
     data = requests.get(url)
     if data.status_code == 200:
