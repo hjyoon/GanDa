@@ -15,13 +15,23 @@ import {
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import LayersClearIcon from '@mui/icons-material/LayersClear';
+import ImageIcon from '@mui/icons-material/Image';
 import Divider from '../components/common/Divider';
-import { UploadedFileType } from '../types';
+import { ModelType, ModelValueType, UploadedFileType } from '../types';
 import { apiGetGan, apiGetGanList } from '../api';
-import sample from '../assets/sample';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
+
+const ModelCard = styled(Card)`
+	opacity: 0.5;
+	&.selected {
+		box-shadow: 0px 4px 2px -2px rgb(0 0 0 / 50%),
+			0px 2px 2px 0px rgb(0 0 0 / 28%), 0px 2px 6px 0px rgb(0 0 0 / 24%);
+		opacity: 1;
+	}
+	transition: opacity 1s border 1s;
+`;
 
 const Title = styled('span')`
 	font-weight: 600;
@@ -67,21 +77,34 @@ const ButtonContainer = styled('div')`
 `;
 
 function Generation() {
-	const [currentModelId, setCurrentModelId] = useState();
-	const [modeIds, setModeIds] = useState();
+	const [currentModel, setCurrentModel] = useState<ModelType>({} as ModelType);
+	const [Models, setModels] = useState<Array<ModelType>>([] as Array<ModelType>);
 	const [mainImage, setMainImage] = useState<UploadedFileType>();
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
 
-	const getGanList = async () => {
+	const changeCurrentModel = useCallback((Model: ModelType) => {
+		setCurrentModel(Model);
+	}, []);
+
+	const getGanList = useCallback(async () => {
 		try {
 			const { data } = await apiGetGanList();
+			setModels(
+				Object.keys(data).map((id: string, idx: number) => {
+					const Model = { id, ...(data[id] as ModelValueType) } as ModelType;
+					if (idx === 0) {
+						setCurrentModel(Model);
+					}
+					return Model;
+				})
+			);
 		} catch (e) {
 			// error
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		getGanList();
@@ -97,11 +120,11 @@ function Generation() {
 		setMainImage(image);
 	}, []);
 
-	const getImage = useCallback(async () => {
+	const getImage = useCallback(async (Model: string) => {
 		setLoading(true);
 		try {
 			// api
-			const { data } = await apiGetGan('1');
+			const { data } = await apiGetGan(Model);
 			const file = new File([data], '');
 			Object.assign(file, {
 				preview: URL.createObjectURL(file),
@@ -116,6 +139,44 @@ function Generation() {
 		}
 		setLoading(false);
 	}, []);
+
+	const modelList = useMemo(
+		() =>
+			Models.map((model: ModelType) => (
+				<ModelCard
+					key={model.id}
+					sx={{ margin: '2px' }}
+					className={currentModel.id === model.id ? 'selected' : ''}
+				>
+					<CardActionArea onClick={() => changeCurrentModel(model)}>
+						{model.image ? (
+							<CardMedia component='img' height='200' image={model.image} alt='' />
+						) : (
+							<Container
+								sx={{
+									height: 200,
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+									borderBottom: '1px solid grey',
+								}}
+							>
+								<ImageIcon fontSize='large' />
+							</Container>
+						)}
+						<CardContent>
+							<Typography gutterBottom variant='h6' component='div'>
+								{model.name}
+							</Typography>
+							<Typography variant='body2' color='text.secondary'>
+								{model.description}
+							</Typography>
+						</CardContent>
+					</CardActionArea>
+				</ModelCard>
+			)),
+		[currentModel, Models]
+	);
 
 	const mainContent = useMemo(
 		() => (
@@ -164,23 +225,7 @@ function Generation() {
 		<>
 			<Divider>
 				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
-					<ImageList cols={3}>
-						{sample.map(img => (
-							<Card key={img} sx={{ margin: '2px' }}>
-								<CardActionArea>
-									<CardMedia component='img' height='200' image={img} alt='' />
-									<CardContent>
-										<Typography gutterBottom variant='h5' component='div'>
-											Lorem
-										</Typography>
-										<Typography variant='body2' color='text.secondary'>
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-										</Typography>
-									</CardContent>
-								</CardActionArea>
-							</Card>
-						))}
-					</ImageList>
+					<ImageList cols={2}>{modelList}</ImageList>
 				</ScrollableContainer>
 				<Container
 					sx={{
@@ -199,7 +244,11 @@ function Generation() {
 					{mainContent}
 					{subImages && subContent}
 					<ButtonContainer>
-						<Button variant='contained' onClick={getImage} disabled={isLoading}>
+						<Button
+							variant='contained'
+							onClick={() => getImage(currentModel.id)}
+							disabled={isLoading}
+						>
 							Get New Image
 						</Button>
 						<Button

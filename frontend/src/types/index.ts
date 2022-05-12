@@ -25,3 +25,14 @@ export interface LoadingPropType {
 	isOpen: boolean;
 	message: string;
 }
+
+export interface ModelValueType {
+	pkl: string;
+	name: string;
+	image: string;
+	description: string;
+}
+
+export interface ModelType extends ModelValueType {
+	id: string;
+}

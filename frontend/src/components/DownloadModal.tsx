@@ -91,8 +91,8 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 						}
 					/>
 				</Container>
-				<ScrollableContainer>
-					<ImageList sx={{ width: 500, height: 400 }} cols={4}>
+				<ScrollableContainer sx={{ width: 500, height: 400 }}>
+					<ImageList cols={4} sx={{ paddindRight: 0 }}>
 						{files.map((file, idx) => (
 							<ImageListItem key={file.preview}>
 								<FormControlLabel

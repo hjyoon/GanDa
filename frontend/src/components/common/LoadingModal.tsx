@@ -13,7 +13,7 @@ const ModalBox = styled(Paper)`
 	justify-content: center;
 	align-items: center;
 	box-shadow: 24;
-	padding: 20px;
+	padding: 20px 20px 40px 20px;
 	border-radius: 10px;
 `;
 
