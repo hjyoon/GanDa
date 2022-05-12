@@ -64,6 +64,8 @@ async def gen_image(
         background_tasks.add_task(resize_image, filename=file.filename)
         file_urls.append(PATH_FILES + file.filename)
     '''
+    if not os.path.exists("static"):
+        os.mkdir("static")
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
     params = {
@@ -96,6 +98,8 @@ async def create_data_list(
     img: Optional[UploadFile] = None,
     description: Optional[str] = None,
 ):
+    if not os.path.exists("static"):
+        os.mkdir("static")
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
     if not os.path.exists("static/pkls"):
@@ -130,6 +134,8 @@ async def update_data(
     img: Optional[UploadFile] = None,
     description: Optional[str] = None,
 ):
+    if not os.path.exists("static"):
+        os.mkdir("static")
     if not os.path.exists("static/images"):
         os.mkdir("static/images")
     img_content = await img.read()
