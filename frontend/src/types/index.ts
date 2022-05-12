@@ -36,3 +36,21 @@ export interface ModelValueType {
 export interface ModelType extends ModelValueType {
 	id: string;
 }
+
+export interface CreateGanParamsType {
+	name: string;
+	description: string;
+	formData: FormData;
+}
+
+export interface UpdateGanParamsType {
+	dataId: string;
+	name: string;
+	description: string;
+	formData: FormData;
+}
+
+export interface UpdatePklNameType {
+	dataId: string;
+	name: string;
+}

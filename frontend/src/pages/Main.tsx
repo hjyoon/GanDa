@@ -45,7 +45,7 @@ function Main() {
 	const navigate = useNavigate();
 	return (
 		<Divider>
-			<ImageList cols={3} gap={8} sx={{ padding: '50px' }}>
+			<ImageList cols={4} gap={8} sx={{ padding: '50px' }}>
 				{sample.map(img => (
 					<ImageListItem key={Math.random()}>
 						<img src={img} alt='' />

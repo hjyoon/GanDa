@@ -4,6 +4,7 @@ import {
 	Button,
 	Card,
 	CardActionArea,
+	CardActions,
 	CardContent,
 	CardMedia,
 	Container,
@@ -174,10 +175,13 @@ function Generation() {
 								{model.name}
 							</Typography>
 							<Typography variant='body2' color='text.secondary'>
-								{model.description}
+								{model.description || '...'}
 							</Typography>
 						</CardContent>
 					</CardActionArea>
+					<CardActions>
+						<Button>Detail</Button>
+					</CardActions>
 				</ModelCard>
 			)),
 		[currentModel, Models]
