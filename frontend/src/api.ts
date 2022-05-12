@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const baseURL = `${process.env.REACT_APP_PROTOCOL}://${window.location.hostname}:${process.env.REACT_APP_PORT}/api`;
-const baseURL = 'http://k6s106.p.ssafy.io:8010/api';
+const baseURL = `${process.env.REACT_APP_PROTOCOL}://${window.location.hostname}:${process.env.REACT_APP_PORT}/api`;
+// const baseURL = 'http://k6s106.p.ssafy.io:8010/api';
 const api = axios.create({
 	baseURL,
 });
@@ -11,6 +11,6 @@ export const apiGetGan = (dataId: string) =>
 		responseType: 'arraybuffer',
 	});
 
-export const apiGetGanList = () => api.get('/data-list');
+export const apiGetGanList = () => api.get('/data-list/');
 
 export const apiTunGan = () => api.post('/');

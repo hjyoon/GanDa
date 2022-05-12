@@ -150,7 +150,12 @@ function Generation() {
 				>
 					<CardActionArea onClick={() => changeCurrentModel(model)}>
 						{model.image ? (
-							<CardMedia component='img' height='200' image={model.image} alt='' />
+							<CardMedia
+								component='img'
+								height='200'
+								image={`http://k6s106.p.ssafy.io:8010/api/images/${model.image}`}
+								alt=''
+							/>
 						) : (
 							<Container
 								sx={{
