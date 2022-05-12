@@ -12,7 +12,7 @@ from os import getcwd
 from PIL import Image
 
 
-import settings
+from . import settings
 
 
 app = FastAPI()
