@@ -225,7 +225,11 @@ function Generation() {
 						</CardContent>
 					</CardActionArea>
 					<CardActions>
+<<<<<<< HEAD
 						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
+=======
+						<Button>Detail</Button>
+>>>>>>> 605235c (feat #S06P31S106-117 : set api)
 					</CardActions>
 				</ModelCard>
 			)),

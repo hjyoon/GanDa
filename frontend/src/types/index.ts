@@ -56,6 +56,7 @@ export interface UpdatePklNameType {
 	dataId: string;
 	name: string;
 }
+<<<<<<< HEAD
 
 export interface DetailModalPropType {
 	model: ModelType;
@@ -72,3 +73,5 @@ export interface UploadTrainImageModalPropType {
 	target: ModelType;
 	setTarget: Function;
 }
+=======
+>>>>>>> 605235c (feat #S06P31S106-117 : set api)

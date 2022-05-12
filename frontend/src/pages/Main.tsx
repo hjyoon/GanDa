@@ -46,9 +46,12 @@ function Main() {
 	const navigate = useNavigate();
 	return (
 		<Divider>
+<<<<<<< HEAD
 			<Helmet>
 				<title>GanDa에서 이미지를 생성하세요</title>
 			</Helmet>
+=======
+>>>>>>> 605235c (feat #S06P31S106-117 : set api)
 			<ImageList cols={4} gap={8} sx={{ padding: '50px' }}>
 				{sample.map(img => (
 					<ImageListItem key={Math.random()}>
