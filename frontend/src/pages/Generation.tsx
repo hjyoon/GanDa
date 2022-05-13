@@ -129,7 +129,11 @@ function Generation() {
 	const handleUploadModalClose = () => {
 		setUploadModalShown(false);
 	};
+<<<<<<< HEAD
 >>>>>>> 58fc55e (Add uploading .pkl file)
+=======
+	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
+>>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
 
 	const changeCurrentModel = useCallback((Model: ModelType) => {
 		setCurrentModel(Model);
@@ -226,10 +230,14 @@ function Generation() {
 					</CardActionArea>
 					<CardActions>
 <<<<<<< HEAD
+<<<<<<< HEAD
 						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
 =======
 						<Button>Detail</Button>
 >>>>>>> 605235c (feat #S06P31S106-117 : set api)
+=======
+						<Button onClick={() => setTargetModel(model)}>Detail</Button>
+>>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
 					</CardActions>
 				</ModelCard>
 			)),
@@ -374,7 +382,12 @@ function Generation() {
 			/>
 =======
 			<LoadingModal isOpen={isLoading} message='작업 중 입니다...' />
+<<<<<<< HEAD
 >>>>>>> 58fc55e (Add uploading .pkl file)
+=======
+			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
+			<DetailModal model={targetModel} setTarget={setTargetModel} />
+>>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
 		</>
 	);
 }
