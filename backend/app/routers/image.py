@@ -11,7 +11,6 @@ from ..settings import BASE_URL, IMAGE_DIR
 from ..setup import setup
 
 router = APIRouter(
-    prefix="/gen-image",
     tags=["image"],
 )
 

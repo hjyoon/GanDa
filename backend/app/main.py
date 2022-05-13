@@ -22,7 +22,14 @@ from .routers import (
 
 app = FastAPI()
 
-app.include_router(image.router)
+app.include_router(
+    image.router,
+    prefix="/api/gen-image",
+)
+app.include_router(
+    data.router,
+    prefix="/api/data-list"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -52,96 +59,6 @@ def resize_image(filename: str):
         image.thumbnail(size_defined)
         image.save(PATH_FILES + "static/" + "images/" + str(size['width']) + "X" + str(size['height']) + "_" + saved_file_name)
     print("success")
-
-
-@app.get("/api/data-list/")
-async def read_data_list():
-    url = f"{BASE_URL}{model_url}"
-    data = requests.get(url)
-    if data.status_code == 200:
-        data_str = data.content.decode('utf8').replace("'", '"')
-        data_json = json.loads(data_str)
-        return data_json
-    return Response(status_code=data.status_code)
-
-
-@app.post("/api/data-list/")
-async def create_data_list(
-    pkl_file: UploadFile, 
-    name: Optional[str] = None, 
-    img: Optional[UploadFile] = None,
-    description: Optional[str] = None,
-):
-    if not os.path.exists("static"):
-        os.mkdir("static")
-    if not os.path.exists("static/images"):
-        os.mkdir("static/images")
-    if not os.path.exists("static/pkls"):
-        os.mkdir("static/pkls")
-    img_content = await img.read()
-    pkl_content = await pkl_file.read()
-    with open(f"static/images/{img.filename}", "wb") as f:
-        f.write(img_content)
-    with open(f"static/pkls/{pkl_file.filename}", "wb") as f:
-        f.write(pkl_content)
-    files = {
-        'img' : (f"{img.filename}", open(f"static/images/{img.filename}",'rb'), f"{img.content_type}"),
-        'pkl_file' : (f"{pkl_file.filename}", open(f"static/pkls/{pkl_file.filename}",'rb'), f"{pkl_file.content_type}"),
-    }
-    params = {
-        'name' : name,
-        'description' : description
-    }
-    url = f"{BASE_URL}{model_url}"
-    data = requests.post(url, params=params, files=files)
-    if data.status_code == 200:
-        data_str = data.content.decode('utf8').replace("'", '"')
-        data_json = json.loads(data_str)
-        return data_json
-    return Response(status_code=data.status_code)
-
-
-@app.patch("/api/data-list/{data_id}/")
-async def update_data(
-    data_id: int,
-    name: Optional[str] = None, 
-    img: Optional[UploadFile] = None,
-    description: Optional[str] = None,
-):
-    if not os.path.exists("static"):
-        os.mkdir("static")
-    if not os.path.exists("static/images"):
-        os.mkdir("static/images")
-    img_content = await img.read()
-    with open(f"static/images/{img.filename}", "wb") as f:
-        f.write(img_content)
-    files = {
-        'img' : (f"{img.filename}", open(f"static/images/{img.filename}",'rb'), f"{img.content_type}")
-    }
-    params = {
-        'name' : name,
-        'description' : description
-    }
-    url = f"{BASE_URL}{model_url}{data_id}/"
-    data = requests.patch(url, params=params, files=files)
-    if data.status_code == 200:
-        data_str = data.content.decode('utf8').replace("'", '"')
-        data_json = json.loads(data_str)
-        return data_json
-    return Response(status_code=data.status_code)
-
-
-@app.delete("/api/data-list/{data_id}/")
-async def delete_data(
-    data_id: int,
-):
-    url = f"{BASE_URL}{model_url}{data_id}/"
-    data = requests.delete(url)
-    if data.status_code == 200:
-        data_str = data.content.decode('utf8').replace("'", '"')
-        data_json = json.loads(data_str)
-        return data_json
-    return Response(status_code=data.status_code)
 
 
 @app.patch("/api/pkl/rename/{data_id}/")
