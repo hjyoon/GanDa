@@ -13,9 +13,16 @@ from PIL import Image
 
 
 from . import settings
+from .routers import (
+    data,
+    image,
+    train
+)
 
 
 app = FastAPI()
+
+app.include_router(image.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,39 +52,6 @@ def resize_image(filename: str):
         image.thumbnail(size_defined)
         image.save(PATH_FILES + "static/" + "images/" + str(size['width']) + "X" + str(size['height']) + "_" + saved_file_name)
     print("success")
-
-
-@app.get("/api/gen-image/{data_id}/")
-async def gen_image(
-    data_id: str, 
-    count: Optional[int] = 1
-):
-    '''    
-    file_urls = []
-    for file in in_files:
-        # SAVE FILE ORIGINAL
-        with open(PATH_FILES + file.filename, "wb") as myfile:
-            content = await file.read()
-            myfile.write(content)
-            myfile.close()
-        # RESIZE IMAGES
-        background_tasks.add_task(resize_image, filename=file.filename)
-        file_urls.append(PATH_FILES + file.filename)
-    '''
-    if not os.path.exists("static"):
-        os.mkdir("static")
-    if not os.path.exists("static/images"):
-        os.mkdir("static/images")
-    params = {
-        'count' : count
-    }
-    url = f"{BASE_URL}{image_url}{data_id}"
-    data = requests.get(url, params=params)
-    if data.status_code == 200:
-        with open(f"static/images/{data_id}.png", "wb") as f:
-            f.write(data.content)
-        return FileResponse(f"static/images/{data_id}.png")
-    return Response(status_code=data.status_code)
 
 
 @app.get("/api/data-list/")
