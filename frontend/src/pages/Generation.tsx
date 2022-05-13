@@ -23,6 +23,7 @@ import { apiGetGan, apiGetGanList } from '../api';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
+import DetailModal from '../components/generation/DetailModal';
 
 const ModelCard = styled(Card)`
 	opacity: 0.5;
@@ -85,6 +86,7 @@ function Generation() {
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
+	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
 
 	const changeCurrentModel = useCallback((Model: ModelType) => {
 		setCurrentModel(Model);
@@ -180,7 +182,7 @@ function Generation() {
 						</CardContent>
 					</CardActionArea>
 					<CardActions>
-						<Button>Detail</Button>
+						<Button onClick={() => setTargetModel(model)}>Detail</Button>
 					</CardActions>
 				</ModelCard>
 			)),
@@ -276,6 +278,7 @@ function Generation() {
 				files={subImages}
 			/>
 			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
+			<DetailModal model={targetModel} setTarget={setTargetModel} />
 		</>
 	);
 }

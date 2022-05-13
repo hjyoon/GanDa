@@ -54,3 +54,8 @@ export interface UpdatePklNameType {
 	dataId: string;
 	name: string;
 }
+
+export interface DetailModalPropType {
+	model: ModelType;
+	setTarget: Function;
+}
