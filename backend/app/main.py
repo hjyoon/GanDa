@@ -35,6 +35,10 @@ app.include_router(
     pkl.router,
     prefix="/api/pkl"
 )
+app.include_router(
+    train.router,
+    prefix="/api/train"
+)
 
 app.add_middleware(
     CORSMiddleware,

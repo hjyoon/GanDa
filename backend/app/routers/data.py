@@ -49,7 +49,7 @@ async def create_data_list(
     else:
         img_content = await img.read()
         image_path = f"{IMAGE_DIR}{img.filename}"
-        with open(pkl_path, "wb") as f:
+        with open(image_path, "wb") as f:
             f.write(img_content)
         files = {
             'img' : (f"{img.filename}", open(image_path,'rb'), f"{img.content_type}"),
