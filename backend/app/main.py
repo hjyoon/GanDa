@@ -1,18 +1,5 @@
-import datetime
-import json
-import os
-import requests
-from typing import Optional
-
-
-from fastapi import FastAPI, UploadFile, BackgroundTasks
-from fastapi.responses import FileResponse, Response
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from os import getcwd
-from PIL import Image
-
-
-from . import settings
 from .routers import (
     data,
     image,

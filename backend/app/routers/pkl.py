@@ -40,5 +40,5 @@ async def pkl_download(
         pkl_path = f"{PKL_DIR}{data_id}.pkl"
         with open(pkl_path, "wb") as f:
             f.write(data.content)
-        return FileResponse(pkl_path)
+        return FileResponse(pkl_path, media_type='application/octet-stream')
     return Response(status_code=data.status_code)
