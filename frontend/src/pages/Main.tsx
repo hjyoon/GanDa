@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Helmet } from 'react-helmet-async';
 import {
 	Container,
 	ImageList,
@@ -45,6 +46,9 @@ function Main() {
 	const navigate = useNavigate();
 	return (
 		<Divider>
+			<Helmet>
+				<title>GanDa에서 이미지를 생성하세요</title>
+			</Helmet>
 			<ImageList cols={4} gap={8} sx={{ padding: '50px' }}>
 				{sample.map(img => (
 					<ImageListItem key={Math.random()}>
@@ -66,7 +70,7 @@ function Main() {
 					<Content>Get Unique Image by using GAN</Content>
 					<ButtonContainer>
 						<Button variant='contained' onClick={() => navigate('/generate')}>
-							Generate
+							이미지 생성
 						</Button>
 						{/* <Button variant='contained'>Do something</Button> */}
 					</ButtonContainer>

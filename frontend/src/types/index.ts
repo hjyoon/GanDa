@@ -31,6 +31,8 @@ export interface ModelValueType {
 	name: string;
 	image: string;
 	description: string;
+	fid: number;
+	kimg: number;
 }
 
 export interface ModelType extends ModelValueType {
@@ -58,4 +60,5 @@ export interface UpdatePklNameType {
 export interface DetailModalPropType {
 	model: ModelType;
 	setTarget: Function;
+	getGanList: Function;
 }

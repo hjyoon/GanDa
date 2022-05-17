@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from '@emotion/styled';
 import {
 	Button,
@@ -182,7 +183,7 @@ function Generation() {
 						</CardContent>
 					</CardActionArea>
 					<CardActions>
-						<Button onClick={() => setTargetModel(model)}>Detail</Button>
+						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
 					</CardActions>
 				</ModelCard>
 			)),
@@ -235,6 +236,9 @@ function Generation() {
 	return (
 		<>
 			<Divider>
+				<Helmet>
+					<title>이미지 생성 | GanDa</title>
+				</Helmet>
 				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
 					<ImageList cols={2}>{modelList}</ImageList>
 				</ScrollableContainer>
@@ -247,7 +251,7 @@ function Generation() {
 					}}
 				>
 					<Title>
-						Generate Images
+						이미지 생성
 						<IconButton onClick={initImages} title='목록 초기화'>
 							<LayersClearIcon />
 						</IconButton>
@@ -260,14 +264,14 @@ function Generation() {
 							onClick={() => getImage(currentModel.id)}
 							disabled={isLoading}
 						>
-							Get New Image
+							생성 하기
 						</Button>
 						<Button
 							variant='contained'
 							onClick={() => setModalShown(true)}
 							disabled={subImages.length === 0}
 						>
-							Download
+							다운로드
 						</Button>
 					</ButtonContainer>
 				</Container>
@@ -278,7 +282,11 @@ function Generation() {
 				files={subImages}
 			/>
 			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
-			<DetailModal model={targetModel} setTarget={setTargetModel} />
+			<DetailModal
+				model={targetModel}
+				setTarget={setTargetModel}
+				getGanList={getGanList}
+			/>
 		</>
 	);
 }

@@ -38,7 +38,7 @@ function AppHeader() {
 				<Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
 					<ToggleColorMode />
 					<Button sx={{ color: 'white' }} onClick={() => navigate('/generate')}>
-						GENERATE
+						이미지 생성
 					</Button>
 					{/* <Button sx={{ color: 'white' }} onClick={() => navigate('/tuning')}>
 						TUNING

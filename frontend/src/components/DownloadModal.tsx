@@ -73,7 +73,7 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 	return (
 		<Modal open={isShown} onClose={() => setShown(false)}>
 			<ModalBox>
-				<Title>Download</Title>
+				<Title>다운로드</Title>
 				<Divider sx={{ width: '100%', margin: '10px' }} />
 				<Container>
 					<FormControlLabel
@@ -118,7 +118,7 @@ function DownloadModal({ isShown, setShown, files }: DownloadPropType) {
 					disabled={isZipping || !isChecked.some(e => e)}
 					onClick={() => downloadAsZipFile(files, isChecked)}
 				>
-					Download
+					다운로드
 				</Button>
 				<LoadingModal isOpen={isZipping} message='압축 중 입니다...' />
 			</ModalBox>

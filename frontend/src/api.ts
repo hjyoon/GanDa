@@ -1,4 +1,6 @@
+/* eslint-disable no-await-in-loop */
 import axios from 'axios';
+import FileSaver from 'file-saver';
 import {
 	CreateGanParamsType,
 	UpdateGanParamsType,
@@ -41,22 +43,16 @@ export const apiUpdateGanList = ({
 	description,
 	formData,
 }: UpdateGanParamsType) =>
-	api.patch(`/data-list/${dataId}/`, {
-		params: {
-			name,
-			description,
-		},
-		data: {
-			...formData,
-		},
+	api.patch(`/data-list/${dataId}/?name=${name}&description=${description}`, {
+		data: formData,
 	});
 
 export const apiUpdatePklName = ({ dataId, name }: UpdatePklNameType) =>
-	api.patch(`/pkl/rename/${dataId}/`, {
-		params: {
-			new_name: name,
-		},
-	});
+	api.patch(`/pkl/rename/${dataId}/?new_name=${name}`);
 
 export const apiDownloadPkl = (dataId: string) =>
-	api.get(`/pkl/download/${dataId}/`);
+	api
+		.get(`/pkl/download/${dataId}/`, {
+			responseType: 'blob',
+		})
+		.then(res => FileSaver.saveAs(res.data, `${new Date().toJSON()}.pkl`));

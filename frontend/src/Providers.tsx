@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { PaletteMode } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { PropType } from './types';
@@ -11,6 +12,23 @@ function Providers({ children }: PropType) {
 			createTheme({
 				palette: {
 					mode: preferMode,
+					primary: {
+						main: '#C966E1',
+					},
+				},
+				typography: {
+					fontFamily: [
+						'-apple-system',
+						'BlinkMacSystemFont',
+						'"Segoe UI"',
+						'Roboto',
+						'"Helvetica Neue"',
+						'Arial',
+						'sans-serif',
+						'"Apple Color Emoji"',
+						'"Segoe UI Emoji"',
+						'"Segoe UI Symbol"',
+					].join(','),
 				},
 			}),
 		[preferMode]
@@ -22,9 +40,11 @@ function Providers({ children }: PropType) {
 	const memoized = useMemo(() => ({ theme, onEditMode }), [theme]);
 
 	return (
-		<StateContext.Provider value={memoized}>
-			<ThemeProvider theme={theme}>{children}</ThemeProvider>
-		</StateContext.Provider>
+		<HelmetProvider>
+			<StateContext.Provider value={memoized}>
+				<ThemeProvider theme={theme}>{children}</ThemeProvider>
+			</StateContext.Provider>
+		</HelmetProvider>
 	);
 }
 

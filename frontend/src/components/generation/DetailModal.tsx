@@ -34,7 +34,8 @@ const ModalBox = styled(Paper)`
 `;
 
 const DeleteModalBox = styled(ModalBox)`
-	width: 300px;
+	padding: 40px;
+	width: 360px;
 `;
 
 const ImageBox = styled('div')`
@@ -57,13 +58,13 @@ const ButtonContainer = styled('div')`
 	top: 10px;
 `;
 
-function DetailModal({ model, setTarget }: DetailModalPropType) {
+function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 	const [isUpdating, setUpdating] = useState(false);
 	const [uploadedImage, setUploadedImage] = useState<UploadedFileType>(
 		{} as UploadedFileType
 	);
 	const [deleteTarget, setDeleteTarget] = useState<ModelType>({} as ModelType);
-	const { register, getValues } = useForm();
+	const { register, getValues, setValue } = useForm();
 	const onDrop = useCallback((acceptedFiles: any) => {
 		URL.revokeObjectURL(uploadedImage.preview || '');
 		setUploadedImage(
@@ -77,6 +78,11 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 		onDrop,
 	});
 
+	useEffect(() => {
+		setValue('name', model.name);
+		setValue('description', model.description);
+	}, [isUpdating]);
+
 	const initState = () => {
 		setUpdating(false);
 		setTarget({} as ModelType);
@@ -89,15 +95,16 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 			// api
 			const formData = new FormData();
 			const { name, description, image } = getValues();
-			formData.append('image', image[0]);
+			formData.append('img', image[0]);
 			formData.append('enctype', 'multipart/form-data');
-			const response = await apiUpdateGanList({
+			await apiUpdateGanList({
 				dataId: model?.id,
 				name,
 				description,
 				formData,
 			});
-			console.log(response);
+			initState();
+			getGanList();
 			// change model
 		} catch (e) {
 			// error
@@ -106,8 +113,7 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 
 	const downloadPkl = async (modelId: string) => {
 		try {
-			const response = await apiDownloadPkl(modelId);
-			console.log(response);
+			await apiDownloadPkl(modelId);
 		} catch (e) {
 			// error
 		}
@@ -174,23 +180,22 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 				<TextField
 					{...register('name')}
 					id='standard-multiline-flexible'
-					label='Name'
+					label='모델 이름'
 					multiline
 					maxRows={4}
-					defaultValue={model?.name}
+					required
 					sx={{ margin: 2 }}
 				/>
 				<TextField
 					{...register('description')}
 					id='standard-multiline-static'
-					label='Description'
+					label='모델 설명'
 					multiline
 					rows={4}
-					defaultValue={model?.description}
 					sx={{ margin: 2 }}
 				/>
 				<Button onClick={updateModel} variant='contained' sx={{ margin: 2 }}>
-					Submit
+					수정
 				</Button>
 				<Button
 					onClick={() => setUpdating(false)}
@@ -198,7 +203,7 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 					color='error'
 					sx={{ margin: 2 }}
 				>
-					Cancel
+					취소
 				</Button>
 			</Box>
 		</>
@@ -242,6 +247,12 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 								>
 									{model?.name}
 								</Typography>
+								<Typography variant='body2' color='text.secondary' sx={{ margin: 2 }}>
+									fid : {model?.fid}
+								</Typography>
+								<Typography variant='body2' color='text.secondary' sx={{ margin: 2 }}>
+									kimg : {model?.kimg}
+								</Typography>
 								<Typography
 									variant='body2'
 									color='text.secondary'
@@ -265,7 +276,7 @@ function DetailModal({ model, setTarget }: DetailModalPropType) {
 					)}
 					<Modal open={Boolean(deleteTarget?.id)}>
 						<DeleteModalBox>
-							<Typography variant='h5'>Are you sure to delete this model?</Typography>
+							<Typography variant='h6'>이 모델을 삭제하시겠습니까?</Typography>
 							<Container
 								sx={{
 									display: 'flex',
