@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import axios from 'axios';
 import FileSaver from 'file-saver';
 import {
@@ -48,11 +49,7 @@ export const apiUpdateGanList = ({
 	});
 
 export const apiUpdatePklName = ({ dataId, name }: UpdatePklNameType) =>
-	api.patch(`/pkl/rename/${dataId}/`, {
-		params: {
-			new_name: name,
-		},
-	});
+	api.patch(`/pkl/rename/${dataId}/?new_name=${name}`);
 
 export const apiDownloadPkl = (dataId: string) =>
 	api

@@ -231,6 +231,7 @@ function Generation() {
 					<CardActions>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
 =======
 						<Button>Detail</Button>
@@ -238,6 +239,9 @@ function Generation() {
 =======
 						<Button onClick={() => setTargetModel(model)}>Detail</Button>
 >>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
+=======
+						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
+>>>>>>> 82fa84a (feat #S06P31S106-120 : set title)
 					</CardActions>
 				</ModelCard>
 			)),
@@ -386,8 +390,16 @@ function Generation() {
 >>>>>>> 58fc55e (Add uploading .pkl file)
 =======
 			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
+<<<<<<< HEAD
 			<DetailModal model={targetModel} setTarget={setTargetModel} />
 >>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
+=======
+			<DetailModal
+				model={targetModel}
+				setTarget={setTargetModel}
+				getGanList={getGanList}
+			/>
+>>>>>>> 82fa84a (feat #S06P31S106-120 : set title)
 		</>
 	);
 }
