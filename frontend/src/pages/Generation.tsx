@@ -9,9 +9,14 @@ import {
 	CardContent,
 	CardMedia,
 	Container,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
 	IconButton,
 	ImageList,
 	ImageListItem,
+	Stack,
 	Typography,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -20,7 +25,7 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ImageIcon from '@mui/icons-material/Image';
 import Divider from '../components/common/Divider';
 import { ModelType, ModelValueType, UploadedFileType } from '../types';
-import { apiGetGan, apiGetGanList } from '../api';
+import { apiGetGan, apiGetGanList, apiUploadModel } from '../api';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
@@ -87,7 +92,44 @@ function Generation() {
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
+<<<<<<< HEAD
 	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
+=======
+	const [isUploadModalShown, setUploadModalShown] = useState<boolean>(false);
+	const [pklSelected, setPklSelected] = useState<File>();
+	const [imgSelected, setImgSelected] = useState<File>();
+
+	const handleImage = (value: File) => {
+		setImgSelected(value);
+	};
+
+	const handlePklModify = async () => {
+		setLoading(true);
+		try {
+			const formData = new FormData();
+			if (imgSelected) {
+				formData.append('img', imgSelected, imgSelected.name);
+			}
+			if (pklSelected) {
+				formData.append('pkl_file', pklSelected, pklSelected.name);
+				await apiUploadModel(formData);
+				window.location.reload();
+			}
+		} catch (error) {
+			console.dir(error);
+		}
+		setLoading(false);
+		setUploadModalShown(false);
+	};
+
+	const handlePkl = (value: File) => {
+		setPklSelected(value);
+	};
+
+	const handleUploadModalClose = () => {
+		setUploadModalShown(false);
+	};
+>>>>>>> 58fc55e (Add uploading .pkl file)
 
 	const changeCurrentModel = useCallback((Model: ModelType) => {
 		setCurrentModel(Model);
@@ -240,6 +282,9 @@ function Generation() {
 					<title>이미지 생성 | GanDa</title>
 				</Helmet>
 				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
+					<Button variant='contained' onClick={() => setUploadModalShown(true)}>
+						pkl 업로드
+					</Button>
 					<ImageList cols={2}>{modelList}</ImageList>
 				</ScrollableContainer>
 				<Container
@@ -276,17 +321,56 @@ function Generation() {
 					</ButtonContainer>
 				</Container>
 			</Divider>
+			<Dialog open={isUploadModalShown} onClose={handleUploadModalClose}>
+				<DialogTitle>pkl 업로드</DialogTitle>
+				<DialogContent>
+					<Stack spacing={2}>
+						<Typography variant='subtitle1'>이미지(선택)</Typography>
+						<input
+							type='file'
+							accept='image/*'
+							onChange={e => {
+								const fileList = e.target.files;
+								if (!fileList) return;
+								handleImage(fileList[0]);
+							}}
+						/>
+						<Typography variant='subtitle1'>pkl 파일(필수)</Typography>
+						<input
+							type='file'
+							accept='.pkl'
+							onChange={e => {
+								const fileList = e.target.files;
+								if (!fileList) return;
+								handlePkl(fileList[0]);
+							}}
+						/>
+					</Stack>
+				</DialogContent>
+				<DialogActions>
+					<Button size='small' onClick={handleUploadModalClose}>
+						Cancel
+					</Button>
+					<Button size='small' variant='contained' onClick={handlePklModify}>
+						OK
+					</Button>
+				</DialogActions>
+			</Dialog>
 			<DownloadModal
 				isShown={isModalShown}
 				setShown={setModalShown}
 				files={subImages}
 			/>
+<<<<<<< HEAD
 			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
 			<DetailModal
 				model={targetModel}
 				setTarget={setTargetModel}
 				getGanList={getGanList}
 			/>
+=======
+			<LoadingModal isOpen={isLoading} message='작업 중 입니다...' />
+>>>>>>> 58fc55e (Add uploading .pkl file)
 		</>
 	);
 }
