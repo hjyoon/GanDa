@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import axios from 'axios';
 import FileSaver from 'file-saver';
 import {
@@ -20,6 +19,8 @@ export const apiGetGan = (dataId: string) =>
 
 export const apiGetGanList = () => api.get('/data-list/');
 
+export const apiUploadModel = (data: FormData) => api.post('/data-list/', data);
+
 export const apiCreateGanList = ({
 	name,
 	description,
@@ -30,9 +31,7 @@ export const apiCreateGanList = ({
 			name,
 			description,
 		},
-		data: {
-			...formData,
-		},
+		data: formData,
 	});
 
 export const apiDeleteGanList = (dataId: string) =>
@@ -49,7 +48,11 @@ export const apiUpdateGanList = ({
 	});
 
 export const apiUpdatePklName = ({ dataId, name }: UpdatePklNameType) =>
-	api.patch(`/pkl/rename/${dataId}/?new_name=${name}`);
+	api.patch(`/pkl/rename/${dataId}/`, {
+		params: {
+			new_name: name,
+		},
+	});
 
 export const apiDownloadPkl = (dataId: string) =>
 	api
