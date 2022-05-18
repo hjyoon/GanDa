@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { Typography, AppBar, Toolbar, Box, Button } from '@mui/material';
 import ToggleColorMode from './ToggleColorMode';
 import logo from '../assets/logo.png';
+import logo2 from '../assets/logo2.png';
 
 const SLink = styled(Link)`
 	text-decoration: none;
@@ -17,6 +18,7 @@ function AppHeader() {
 			<Toolbar sx={{ height: '64px' }}>
 				<Typography variant='h4' component='div' sx={{ flexGrow: 1 }}>
 					<SLink to='/'>
+						<img src={logo2} alt='' height='30px' />
 						<img src={logo} alt='' height='30px' />
 					</SLink>
 				</Typography>
