@@ -62,3 +62,13 @@ export interface DetailModalPropType {
 	setTarget: Function;
 	getGanList: Function;
 }
+
+export interface UploadTrainImageType {
+	dataId: string;
+	formData: FormData;
+}
+
+export interface UploadTrainImageModalPropType {
+	target: ModelType;
+	setTarget: Function;
+}

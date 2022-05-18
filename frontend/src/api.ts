@@ -5,6 +5,7 @@ import {
 	CreateGanParamsType,
 	UpdateGanParamsType,
 	UpdatePklNameType,
+	UploadTrainImageType,
 } from './types';
 
 const baseURL = `${process.env.REACT_APP_PROTOCOL}://${window.location.hostname}:${process.env.REACT_APP_PORT}/api`;
@@ -56,3 +57,14 @@ export const apiDownloadPkl = (dataId: string) =>
 			responseType: 'blob',
 		})
 		.then(res => FileSaver.saveAs(res.data, `${new Date().toJSON()}.pkl`));
+
+export const apiGetTrainImages = (dataId: string) =>
+	api.get(`/train/image/${dataId}/`);
+
+export const apiUploadTrainImage = ({
+	dataId,
+	formData,
+}: UploadTrainImageType) =>
+	api.post(`/train/image/${dataId}/`, {
+		data: formData,
+	});

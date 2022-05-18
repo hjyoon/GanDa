@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 import { DetailModalPropType, ModelType, UploadedFileType } from '../../types';
 import { apiDeleteGanList, apiDownloadPkl, apiUpdateGanList } from '../../api';
+import TrainImageModal from './TrainImageModal';
 
 const ModalBox = styled(Paper)`
 	position: absolute;
@@ -64,6 +65,9 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 		{} as UploadedFileType
 	);
 	const [deleteTarget, setDeleteTarget] = useState<ModelType>({} as ModelType);
+	const [trainImageTarget, setTrainImageTarget] = useState<ModelType>(
+		{} as ModelType
+	);
 	const { register, getValues, setValue } = useForm();
 	const onDrop = useCallback((acceptedFiles: any) => {
 		URL.revokeObjectURL(uploadedImage.preview || '');
@@ -269,12 +273,30 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 									</IconButton>
 								</ButtonContainer>
 							</Container>
-							<Button variant='contained' onClick={() => downloadPkl(model?.id)}>
-								모델 다운로드
-							</Button>
+							<Container
+								sx={{
+									display: 'flex',
+									width: '100%',
+									justifyContent: 'center',
+								}}
+							>
+								<Button
+									variant='contained'
+									onClick={() => downloadPkl(model?.id)}
+									sx={{ marginRight: 2 }}
+								>
+									모델 다운로드
+								</Button>
+								<Button variant='contained' onClick={() => setTrainImageTarget(model)}>
+									학습 이미지 확인
+								</Button>
+							</Container>
 						</>
 					)}
-					<Modal open={Boolean(deleteTarget?.id)}>
+					<Modal
+						open={Boolean(deleteTarget?.id)}
+						onClose={() => setDeleteTarget({} as ModelType)}
+					>
 						<DeleteModalBox>
 							<Typography variant='h6'>이 모델을 삭제하시겠습니까?</Typography>
 							<Container
@@ -300,6 +322,17 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 								</Button>
 							</Container>
 						</DeleteModalBox>
+					</Modal>
+					<Modal
+						open={Boolean(trainImageTarget?.id)}
+						onClose={() => setTrainImageTarget({} as ModelType)}
+					>
+						<ModalBox>
+							<TrainImageModal
+								target={trainImageTarget}
+								setTarget={setTrainImageTarget}
+							/>
+						</ModalBox>
 					</Modal>
 				</>
 			</ModalBox>
