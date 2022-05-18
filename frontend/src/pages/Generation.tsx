@@ -92,9 +92,6 @@ function Generation() {
 	const [page, setPage] = useState<number>(1);
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
-<<<<<<< HEAD
-	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
-=======
 	const [isUploadModalShown, setUploadModalShown] = useState<boolean>(false);
 	const [pklSelected, setPklSelected] = useState<File>();
 	const [imgSelected, setImgSelected] = useState<File>();
@@ -129,11 +126,7 @@ function Generation() {
 	const handleUploadModalClose = () => {
 		setUploadModalShown(false);
 	};
-<<<<<<< HEAD
->>>>>>> 58fc55e (Add uploading .pkl file)
-=======
 	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
->>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
 
 	const changeCurrentModel = useCallback((Model: ModelType) => {
 		setCurrentModel(Model);
@@ -229,19 +222,7 @@ function Generation() {
 						</CardContent>
 					</CardActionArea>
 					<CardActions>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
-=======
-						<Button>Detail</Button>
->>>>>>> 605235c (feat #S06P31S106-117 : set api)
-=======
-						<Button onClick={() => setTargetModel(model)}>Detail</Button>
->>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
-=======
-						<Button onClick={() => setTargetModel(model)}>상세정보</Button>
->>>>>>> 82fa84a (feat #S06P31S106-120 : set title)
 					</CardActions>
 				</ModelCard>
 			)),
@@ -377,29 +358,13 @@ function Generation() {
 				setShown={setModalShown}
 				files={subImages}
 			/>
-<<<<<<< HEAD
-			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
-			<DetailModal
-				model={targetModel}
-				setTarget={setTargetModel}
-				getGanList={getGanList}
-			/>
-=======
 			<LoadingModal isOpen={isLoading} message='작업 중 입니다...' />
-<<<<<<< HEAD
->>>>>>> 58fc55e (Add uploading .pkl file)
-=======
 			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
-<<<<<<< HEAD
-			<DetailModal model={targetModel} setTarget={setTargetModel} />
->>>>>>> 3bd6256 (feat #S06P31S106-119 : delete model)
-=======
 			<DetailModal
 				model={targetModel}
 				setTarget={setTargetModel}
 				getGanList={getGanList}
 			/>
->>>>>>> 82fa84a (feat #S06P31S106-120 : set title)
 		</>
 	);
 }
