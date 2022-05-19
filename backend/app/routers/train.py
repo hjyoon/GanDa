@@ -1,5 +1,6 @@
 import json
 import os
+from urllib import response
 import requests
 import shutil
 from typing import List
@@ -63,4 +64,13 @@ async def upload_train_image(
         data_str = data.content.decode('utf8').replace("'", '"')
         data_json = json.loads(data_str)
         return data_json
+    return Response(status_code=data.status_code)
+
+
+@router.delete("/image/{data_id}/")
+async def upload_train_image(
+    data_id: str,
+):
+    url = f"{BASE_URL}{train_url}{data_id}/"
+    data = requests.delete(url)
     return Response(status_code=data.status_code)
