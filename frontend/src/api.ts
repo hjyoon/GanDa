@@ -72,3 +72,6 @@ export const apiUploadTrainImage = ({
 	dataId,
 	formData,
 }: UploadTrainImageType) => api.post(`/train/image/${dataId}/`, formData);
+
+export const apiDeleteTrainImages = (dataId: string) =>
+	api.delete(`/train/image/${dataId}/`);

@@ -10,8 +10,12 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { ModelType, UploadTrainImageModalPropType } from '../../types';
-import { apiGetTrainImages, apiUploadTrainImage } from '../../api';
+import { UploadTrainImageModalPropType } from '../../types';
+import {
+	apiGetTrainImages,
+	apiUploadTrainImage,
+	apiDeleteTrainImages,
+} from '../../api';
 
 const Title = styled('span')`
 	font-weight: 700;
@@ -46,7 +50,7 @@ const SubDummy = styled('div')`
 	margin: 6px 8px;
 `;
 
-function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
+function TrainImageModal({ target }: UploadTrainImageModalPropType) {
 	const [mainImage, setMainImage] = useState<string>('');
 	const [subImages, setSubImages] = useState<Array<string>>([] as Array<string>);
 	const [page, setPage] = useState<number>(1);
@@ -68,15 +72,29 @@ function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
 	});
 
 	const getImages = useCallback(async () => {
-		const { data } = await apiGetTrainImages(target?.id);
-		if (data.length > 0) {
-			setMainImage(data[0]);
+		try {
+			const { data } = await apiGetTrainImages(target?.id);
+			if (data.length > 0) {
+				setMainImage(data[0]);
+			}
+			setSubImages(data);
+		} catch (e) {
+			// error
 		}
-		setSubImages(data);
 	}, []);
 
 	const changeMainImage = useCallback((image: string) => {
 		setMainImage(image);
+	}, []);
+
+	const deleteImages = useCallback(async () => {
+		try {
+			await apiDeleteTrainImages(target?.id);
+			setMainImage('');
+			setSubImages([]);
+		} catch (e) {
+			// error
+		}
 	}, []);
 
 	useEffect(() => {
@@ -143,7 +161,9 @@ function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
 			<Divider sx={{ width: '100%', margin: '10px' }} />
 			{mainContent}
 			{subImages && subContent}
-			<Button onClick={() => setTarget({} as ModelType)}>뒤로가기</Button>
+			<Button variant='contained' onClick={deleteImages}>
+				학습 이미지 초기화
+			</Button>
 		</>
 	);
 }

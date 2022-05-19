@@ -74,5 +74,4 @@ export interface UploadTrainImageType {
 
 export interface UploadTrainImageModalPropType {
 	target: ModelType;
-	setTarget: Function;
 }

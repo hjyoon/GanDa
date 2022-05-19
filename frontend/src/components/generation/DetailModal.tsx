@@ -344,10 +344,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 						onClose={() => setTrainImageTarget({} as ModelType)}
 					>
 						<ModalBox>
-							<TrainImageModal
-								target={trainImageTarget}
-								setTarget={setTrainImageTarget}
-							/>
+							<TrainImageModal target={trainImageTarget} />
 						</ModalBox>
 					</Modal>
 				</>
