@@ -9,6 +9,7 @@ from fastapi import (
     UploadFile,
     APIRouter,
     Query,
+    File
 )
 from fastapi.responses import Response
 
@@ -37,7 +38,7 @@ async def read_data_list():
 async def create_data_list(
     pkl_file: UploadFile, 
     name: Optional[str] = None, 
-    img: Optional[UploadFile] = None,
+    img: Optional[UploadFile] = File(None),
     description: Optional[str] = None,
     fid: Optional[float] = Query(default=None, gt=0),
     kimg: Optional[int] = Query(default=None, gt=0),
@@ -85,7 +86,7 @@ async def create_data_list(
 async def update_data(
     data_id: int,
     name: Optional[str] = None, 
-    img: Optional[UploadFile] = None,
+    img: Optional[UploadFile] = File(None),
     description: Optional[str] = None,
     fid: Optional[float] = Query(default=None, gt=0),
     kimg: Optional[int] = Query(default=None, gt=0),
