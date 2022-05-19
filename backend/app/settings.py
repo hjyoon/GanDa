@@ -8,7 +8,8 @@ PKL_DIR = f"{BASE_DIR}/static/pkls/"
 
 ganda = f"{BASE_DIR}ganda.jpg"
 
-BASE_URL = "http://k6s106.p.ssafy.io:8010/"
+# BASE_URL = "http://k6s106.p.ssafy.io:8010/"
+BASE_URL = "http://127.0.0.1:8010/"
 
 image_url = "api/gen-image/"
 model_url = "api/data-list/"

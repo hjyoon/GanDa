@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from .routers import (
     data,
     image,
     pkl,
     train
 )
+from .settings import BASE_DIR
 
 
 app = FastAPI()
@@ -32,4 +34,10 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.mount(
+    "/api/images/",
+    StaticFiles(directory=f"{BASE_DIR}static/images/"),
+    name="images"
 )

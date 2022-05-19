@@ -1,5 +1,8 @@
+import datetime
 import json
+import shutil
 import requests
+import os
 from typing import Optional
 
 from fastapi import (
@@ -9,7 +12,7 @@ from fastapi import (
 )
 from fastapi.responses import Response
 
-from ..settings import BASE_URL, IMAGE_DIR, PKL_DIR, ganda
+from ..settings import BASE_DIR, BASE_URL, IMAGE_DIR, PKL_DIR, ganda
 from ..setup import setup
 
 router = APIRouter(
@@ -45,24 +48,29 @@ async def create_data_list(
     with open(pkl_path, "wb") as f:
         f.write(pkl_content)
     if img is None:
-        files = {
-            'img' : ("ganda.jpg", open(ganda,'rb'), "image/jpg"),
-            'pkl_file' : (f"{pkl_file.filename}", open(pkl_path,'rb'), f"{pkl_file.content_type}"),
-        }
+        img_name = "ganda.jpg"
     else:
-        img_content = await img.read()
-        image_path = f"{IMAGE_DIR}{img.filename}"
-        with open(image_path, "wb") as f:
-            f.write(img_content)
-        files = {
-            'img' : (f"{img.filename}", open(image_path,'rb'), f"{img.content_type}"),
-            'pkl_file' : (f"{pkl_file.filename}", open(pkl_path,'rb'), f"{pkl_file.content_type}"),
-        }
+        img_name = img.filename
+        if os.path.isfile(f"{IMAGE_DIR}{img_name}"):
+            t = datetime.datetime.now().isoformat(timespec="seconds").replace(":", "")
+            dot_idx = img_name.rindex(".")
+            img_name = f"{img_name[:dot_idx]}-{t}{img_name[dot_idx:]}"
+        with open(f"{IMAGE_DIR}{img_name}", "wb") as image:
+            shutil.copyfileobj(img.file, image)
+    files = {
+        'pkl_file' : 
+            (
+                f"{pkl_file.filename}", 
+                open(pkl_path,'rb'), 
+                f"{pkl_file.content_type}"
+            ),
+    }
     params = {
         'name' : name,
         'description' : description,
         'fid': fid,
         'kimg': kimg,
+        'img': img_name,
     }
     url = f"{BASE_URL}{model_url}"
     data = requests.post(url, params=params, files=files)
@@ -84,22 +92,24 @@ async def update_data(
 ):
     setup()
     if img is None:
+        img_name = "ganda.jpg"
         files = {
             'img' : ("ganda.jpg", open(ganda,'rb'), "image/jpg"),
         }
     else:
-        img_content = await img.read()
-        image_path = f"{IMAGE_DIR}{img.filename}"
-        with open(image_path, "wb") as f:
-            f.write(img_content)
-        files = {
-            'img' : (f"{img.filename}", open(image_path,'rb'), f"{img.content_type}")
-        }
+        img_name = img.filename
+        if os.path.isfile(f"{IMAGE_DIR}{img_name}"):
+            t = datetime.datetime.now().isoformat(timespec="seconds").replace(":", "")
+            dot_idx = img_name.rindex(".")
+            img_name = f"{img_name[:dot_idx]}-{t}{img_name[dot_idx:]}"
+        with open(f"{IMAGE_DIR}{img_name}", "wb") as image:
+            shutil.copyfileobj(img.file, image)
     params = {
         'name' : name,
         'description' : description,
         'fid': fid,
         'kimg': kimg,
+        'img': img_name,
     }
     url = f"{BASE_URL}{model_url}{data_id}/"
     data = requests.patch(url, params=params, files=files)
