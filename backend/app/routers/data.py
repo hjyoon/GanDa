@@ -93,9 +93,6 @@ async def update_data(
     setup()
     if img is None:
         img_name = "ganda.jpg"
-        files = {
-            'img' : ("ganda.jpg", open(ganda,'rb'), "image/jpg"),
-        }
     else:
         img_name = img.filename
         if os.path.isfile(f"{IMAGE_DIR}{img_name}"):
@@ -112,7 +109,7 @@ async def update_data(
         'img': img_name,
     }
     url = f"{BASE_URL}{model_url}{data_id}/"
-    data = requests.patch(url, params=params, files=files)
+    data = requests.patch(url, params=params)
     if data.status_code == 200:
         data_str = data.content.decode('utf8').replace("'", '"')
         data_json = json.loads(data_str)
