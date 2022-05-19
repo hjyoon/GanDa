@@ -41,10 +41,12 @@ export const apiUpdateGanList = ({
 	dataId,
 	name,
 	description,
+	fid,
+	kimg,
 	formData,
 }: UpdateGanParamsType) =>
 	api.patch(
-		`/data-list/${dataId}/?name=${name}&description=${description}`,
+		`/data-list/${dataId}/?name=${name}&description=${description}&fid=${fid}&kimg=${kimg}`,
 		formData
 	);
 

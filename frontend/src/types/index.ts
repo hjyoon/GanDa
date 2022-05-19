@@ -49,6 +49,8 @@ export interface UpdateGanParamsType {
 	dataId: string;
 	name: string;
 	description: string;
+	fid: number;
+	kimg: number;
 	formData: FormData;
 }
 

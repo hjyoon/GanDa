@@ -85,6 +85,8 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 	useEffect(() => {
 		setValue('name', model.name);
 		setValue('description', model.description);
+		setValue('fid', model.fid);
+		setValue('kimg', model.description);
 	}, [isUpdating]);
 
 	const initState = () => {
@@ -98,7 +100,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 		try {
 			// api
 			const formData = new FormData();
-			const { name, description } = getValues();
+			const { name, description, fid, kimg } = getValues();
 			if (uploadedImage) {
 				formData.append('img', uploadedImage);
 			}
@@ -107,6 +109,8 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 				dataId: model?.id,
 				name,
 				description,
+				fid,
+				kimg,
 				formData,
 			});
 			initState();
@@ -184,13 +188,28 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 			>
 				<TextField
 					{...register('name')}
-					id='standard-multiline-flexible'
+					id='outlined-basic'
 					label='모델 이름'
 					multiline
-					maxRows={4}
-					required
+					maxRows={1}
 					sx={{ margin: 2 }}
 				/>
+				<Box sx={{ marginX: 2 }}>
+					<TextField
+						type='number'
+						{...register('fid')}
+						inputProps={{ max: '1000', min: '0', step: '0.01' }}
+						label='FID'
+						sx={{ width: '50%' }}
+					/>
+					<TextField
+						type='number'
+						{...register('kimg')}
+						inputProps={{ max: '1000000', min: '1', step: '1' }}
+						label='KIMG'
+						sx={{ width: '50%' }}
+					/>
+				</Box>
 				<TextField
 					{...register('description')}
 					id='standard-multiline-static'
