@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
+import { useDropzone } from 'react-dropzone';
 import {
 	Button,
 	Divider,
@@ -10,7 +11,7 @@ import {
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { ModelType, UploadTrainImageModalPropType } from '../../types';
-import { apiGetTrainImages } from '../../api';
+import { apiGetTrainImages, apiUploadTrainImage } from '../../api';
 
 const Title = styled('span')`
 	font-weight: 700;
@@ -49,6 +50,23 @@ function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
 	const [mainImage, setMainImage] = useState<string>('');
 	const [subImages, setSubImages] = useState<Array<string>>([] as Array<string>);
 	const [page, setPage] = useState<number>(1);
+	const onDrop = useCallback(async (acceptedFiles: any) => {
+		try {
+			const formData = new FormData();
+			for (let i = 0; i < acceptedFiles.length; i += 1) {
+				formData.append('images', acceptedFiles[i]);
+			}
+			await apiUploadTrainImage({ dataId: target?.id, formData });
+			getImages();
+		} catch (e) {
+			// error
+		}
+	}, []);
+	const { getRootProps, getInputProps } = useDropzone({
+		accept: 'image/*',
+		onDrop,
+	});
+
 	const getImages = useCallback(async () => {
 		const { data } = await apiGetTrainImages(target?.id);
 		if (data.length > 0) {
@@ -69,7 +87,8 @@ function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
 
 	const mainContent = useMemo(
 		() => (
-			<MainImageContainer>
+			<MainImageContainer {...getRootProps()}>
+				<input {...getInputProps()} />
 				{mainImage && (
 					<img
 						src={`http://k6s106.p.ssafy.io:8010/api/images/train/${target?.id}/${mainImage}`}

@@ -34,8 +34,8 @@ import DetailModal from '../components/generation/DetailModal';
 const ModelCard = styled(Card)`
 	opacity: 0.5;
 	&.selected {
-		box-shadow: 0px 4px 2px -2px rgb(0 0 0 / 50%),
-			0px 2px 2px 0px rgb(0 0 0 / 28%), 0px 2px 6px 0px rgb(0 0 0 / 24%);
+		box-shadow: 2px 4px 4px -4px rgb(0 0 0 / 50%),
+			0px 4px 4px 2px rgb(0 0 0 / 28%), 0px 4px 6px 6px rgb(0 0 0 / 24%);
 		opacity: 1;
 	}
 	transition: opacity 1s border 1s;
@@ -113,7 +113,7 @@ function Generation() {
 				window.location.reload();
 			}
 		} catch (error) {
-			console.dir(error);
+			// console.dir(error);
 		}
 		setLoading(false);
 		setUploadModalShown(false);
@@ -282,7 +282,9 @@ function Generation() {
 					<Button variant='contained' onClick={() => setUploadModalShown(true)}>
 						pkl 업로드
 					</Button>
-					<ImageList cols={2}>{modelList}</ImageList>
+					<ImageList cols={2} sx={{ padding: 1 }}>
+						{modelList}
+					</ImageList>
 				</ScrollableContainer>
 				<Container
 					sx={{

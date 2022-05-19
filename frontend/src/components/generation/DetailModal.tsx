@@ -99,7 +99,10 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 			// api
 			const formData = new FormData();
 			const { name, description } = getValues();
-			formData.append('img', uploadedImage);
+			if (uploadedImage) {
+				formData.append('img', uploadedImage);
+			}
+
 			await apiUpdateGanList({
 				dataId: model?.id,
 				name,

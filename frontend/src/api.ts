@@ -68,7 +68,4 @@ export const apiGetTrainImages = (dataId: string) =>
 export const apiUploadTrainImage = ({
 	dataId,
 	formData,
-}: UploadTrainImageType) =>
-	api.post(`/train/image/${dataId}/`, {
-		data: formData,
-	});
+}: UploadTrainImageType) => api.post(`/train/image/${dataId}/`, formData);
