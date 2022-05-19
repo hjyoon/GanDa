@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import styled from '@emotion/styled';
+import { useForm } from 'react-hook-form';
+import { useDropzone } from 'react-dropzone';
 import {
 	Button,
+	Box,
 	Card,
 	CardActionArea,
 	CardActions,
@@ -10,13 +13,11 @@ import {
 	CardMedia,
 	Container,
 	Dialog,
-	DialogTitle,
 	DialogContent,
-	DialogActions,
 	IconButton,
 	ImageList,
 	ImageListItem,
-	Stack,
+	TextField,
 	Typography,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -25,7 +26,13 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ImageIcon from '@mui/icons-material/Image';
 import Divider from '../components/common/Divider';
 import { ModelType, ModelValueType, UploadedFileType } from '../types';
-import { apiGetGan, apiGetGanList, apiUploadModel } from '../api';
+import {
+	apiCreateGanList,
+	apiGetGan,
+	apiGetGanList,
+	apiUploadModel,
+	imageURL,
+} from '../api';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
@@ -74,6 +81,20 @@ const SubDummy = styled('div')`
 	margin: 6px 8px;
 `;
 
+const ImageBox = styled('div')`
+	width: 400px;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		width: 400px;
+		height: 200px;
+		border-radius: 5px;
+	}
+`;
+
 const ButtonContainer = styled('div')`
 	display: flex;
 	flex-direction: column;
@@ -90,32 +111,51 @@ function Generation() {
 	const [mainImage, setMainImage] = useState<UploadedFileType>();
 	const [subImages, setSubImages] = useState<Array<UploadedFileType>>([]);
 	const [page, setPage] = useState<number>(1);
-	const [isLoading, setLoading] = useState<boolean>(false);
+	const [isUploading, setUploading] = useState<boolean>(false);
+	const [isGenerating, setGenerating] = useState<boolean>(false);
 	const [isModalShown, setModalShown] = useState<boolean>(false);
 	const [isUploadModalShown, setUploadModalShown] = useState<boolean>(false);
+	const [uploadedImage, setUploadedImage] = useState<UploadedFileType>(
+		{} as UploadedFileType
+	);
 	const [pklSelected, setPklSelected] = useState<File>();
 	const [imgSelected, setImgSelected] = useState<File>();
+	const onDrop = useCallback((acceptedFiles: any) => {
+		URL.revokeObjectURL(uploadedImage.preview || '');
+		setUploadedImage(
+			Object.assign(acceptedFiles[0], {
+				preview: URL.createObjectURL(new Blob(acceptedFiles)),
+			})
+		);
+	}, []);
+	const { register, getValues, setValue } = useForm();
+	const { getRootProps, getInputProps } = useDropzone({
+		accept: 'image/*',
+		onDrop,
+	});
 
 	const handleImage = (value: File) => {
 		setImgSelected(value);
 	};
 
 	const handlePklModify = async () => {
-		setLoading(true);
+		setUploading(true);
 		try {
+			const { name, description, fid, kimg } = getValues();
 			const formData = new FormData();
 			if (imgSelected) {
 				formData.append('img', imgSelected, imgSelected.name);
 			}
 			if (pklSelected) {
 				formData.append('pkl_file', pklSelected, pklSelected.name);
-				await apiUploadModel(formData);
-				window.location.reload();
+				await apiCreateGanList({ name, description, fid, kimg, formData });
+				// window.location.reload();
+				handleUploadModalClose();
 			}
 		} catch (error) {
 			// console.dir(error);
 		}
-		setLoading(false);
+		setUploading(false);
 		setUploadModalShown(false);
 	};
 
@@ -124,6 +164,13 @@ function Generation() {
 	};
 
 	const handleUploadModalClose = () => {
+		setValue('name', '');
+		setValue('description', '');
+		setValue('fid', null);
+		setValue('kimg', null);
+		setPklSelected({} as File);
+		setImgSelected({} as File);
+		setUploadedImage({} as UploadedFileType);
 		setUploadModalShown(false);
 	};
 	const [targetModel, setTargetModel] = useState<ModelType>({} as ModelType);
@@ -164,7 +211,7 @@ function Generation() {
 	}, []);
 
 	const getImage = useCallback(async (Model: string) => {
-		setLoading(true);
+		setGenerating(true);
 		try {
 			// api
 			const { data } = await apiGetGan(Model);
@@ -180,7 +227,7 @@ function Generation() {
 		} catch (e) {
 			// error
 		}
-		setLoading(false);
+		setGenerating(false);
 	}, []);
 
 	const modelList = useMemo(
@@ -196,7 +243,7 @@ function Generation() {
 							<CardMedia
 								component='img'
 								height='200'
-								image={`http://k6s106.p.ssafy.io:8010/api/images/${model.image}`}
+								image={`${imageURL}${model.image}`}
 								alt=''
 							/>
 						) : (
@@ -272,15 +319,128 @@ function Generation() {
 		[subImages, page]
 	);
 
+	const formImage = () => {
+		if (uploadedImage?.preview) {
+			return <img src={uploadedImage.preview} alt='' />;
+		}
+		return (
+			<Container
+				sx={{
+					height: 200,
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					border: '3px dashed skyblue',
+					borderRadius: '10px',
+					marginX: 2,
+				}}
+			>
+				이미지 파일을 끌어오세요.
+			</Container>
+		);
+	};
+
+	const uploadForm = useMemo(
+		() => (
+			<Dialog open={isUploadModalShown} onClose={handleUploadModalClose}>
+				<DialogContent>
+					<ImageBox {...getRootProps()}>
+						<>
+							<input
+								{...getInputProps()}
+								{...register('image')}
+								onChange={e => {
+									const fileList = e.target.files;
+									if (!fileList) return;
+									handleImage(fileList[0]);
+								}}
+							/>
+							{formImage()}
+						</>
+					</ImageBox>
+					<Box
+						component='form'
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'start',
+							width: '100%',
+						}}
+						autoComplete='off'
+					>
+						<TextField
+							{...register('name')}
+							id='outlined-basic'
+							label='모델 이름'
+							multiline
+							maxRows={1}
+							sx={{ margin: 2 }}
+						/>
+						<Box sx={{ marginX: 2 }}>
+							<TextField
+								type='number'
+								{...register('fid')}
+								inputProps={{ max: '1000', min: '0', step: '0.01' }}
+								label='FID'
+								sx={{ width: '50%' }}
+							/>
+							<TextField
+								type='number'
+								{...register('kimg')}
+								inputProps={{ max: '1000000', min: '1', step: '1' }}
+								label='KIMG'
+								sx={{ width: '50%' }}
+							/>
+						</Box>
+						<TextField
+							{...register('description')}
+							id='standard-multiline-static'
+							label='모델 설명'
+							multiline
+							rows={4}
+							sx={{ margin: 2 }}
+						/>
+						<Button variant='contained' component='label' sx={{ marginX: 2 }}>
+							{pklSelected ? pklSelected?.name : 'pkl 파일 업로드'}
+							<input
+								name='pkl'
+								type='file'
+								accept='.pkl'
+								hidden
+								onChange={e => {
+									const fileList = e.target.files;
+									if (!fileList) return;
+									handlePkl(fileList[0]);
+								}}
+							/>
+						</Button>
+						<Button onClick={handlePklModify} variant='contained' sx={{ margin: 2 }}>
+							업로드
+						</Button>
+						<Button
+							onClick={handleUploadModalClose}
+							variant='contained'
+							color='error'
+							sx={{ margin: 2 }}
+						>
+							취소
+						</Button>
+					</Box>
+				</DialogContent>
+			</Dialog>
+		),
+		[isUploadModalShown, uploadedImage, pklSelected]
+	);
+
 	return (
 		<>
+			<Helmet>
+				<title>이미지 생성 | GanDa</title>
+			</Helmet>
 			<Divider>
-				<Helmet>
-					<title>이미지 생성 | GanDa</title>
-				</Helmet>
 				<ScrollableContainer sx={{ maxHeight: 'calc(100vh  - 64px)' }}>
 					<Button variant='contained' onClick={() => setUploadModalShown(true)}>
-						pkl 업로드
+						모델 업로드
 					</Button>
 					<ImageList cols={2} sx={{ padding: 1 }}>
 						{modelList}
@@ -306,7 +466,7 @@ function Generation() {
 						<Button
 							variant='contained'
 							onClick={() => getImage(currentModel.id)}
-							disabled={isLoading}
+							disabled={isGenerating}
 						>
 							생성 하기
 						</Button>
@@ -320,48 +480,14 @@ function Generation() {
 					</ButtonContainer>
 				</Container>
 			</Divider>
-			<Dialog open={isUploadModalShown} onClose={handleUploadModalClose}>
-				<DialogTitle>pkl 업로드</DialogTitle>
-				<DialogContent>
-					<Stack spacing={2}>
-						<Typography variant='subtitle1'>이미지(선택)</Typography>
-						<input
-							type='file'
-							accept='image/*'
-							onChange={e => {
-								const fileList = e.target.files;
-								if (!fileList) return;
-								handleImage(fileList[0]);
-							}}
-						/>
-						<Typography variant='subtitle1'>pkl 파일(필수)</Typography>
-						<input
-							type='file'
-							accept='.pkl'
-							onChange={e => {
-								const fileList = e.target.files;
-								if (!fileList) return;
-								handlePkl(fileList[0]);
-							}}
-						/>
-					</Stack>
-				</DialogContent>
-				<DialogActions>
-					<Button size='small' onClick={handleUploadModalClose}>
-						Cancel
-					</Button>
-					<Button size='small' variant='contained' onClick={handlePklModify}>
-						OK
-					</Button>
-				</DialogActions>
-			</Dialog>
+			{uploadForm}
 			<DownloadModal
 				isShown={isModalShown}
 				setShown={setModalShown}
 				files={subImages}
 			/>
-			<LoadingModal isOpen={isLoading} message='작업 중 입니다...' />
-			<LoadingModal isOpen={isLoading} message='생성 중 입니다...' />
+			<LoadingModal isOpen={isUploading} message='작업 중 입니다...' />
+			<LoadingModal isOpen={isGenerating} message='생성 중 입니다...' />
 			<DetailModal
 				model={targetModel}
 				setTarget={setTargetModel}

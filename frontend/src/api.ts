@@ -12,6 +12,8 @@ const api = axios.create({
 	baseURL,
 });
 
+export const imageURL = `${baseURL}/images/`;
+
 export const apiGetGan = (dataId: string) =>
 	api.get(`/gen-image/${dataId}/`, {
 		responseType: 'arraybuffer',
@@ -24,15 +26,14 @@ export const apiUploadModel = (data: FormData) => api.post('/data-list/', data);
 export const apiCreateGanList = ({
 	name,
 	description,
+	fid,
+	kimg,
 	formData,
 }: CreateGanParamsType) =>
-	api.post('/data-list/', {
-		params: {
-			name,
-			description,
-		},
-		data: formData,
-	});
+	api.post(
+		`/data-list/?name=${name}&description=${description}&fid=${fid}&kimg=${kimg}`,
+		formData
+	);
 
 export const apiDeleteGanList = (dataId: string) =>
 	api.delete(`/data-list/${dataId}/`);

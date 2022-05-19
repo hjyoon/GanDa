@@ -16,7 +16,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useForm } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 import { DetailModalPropType, ModelType, UploadedFileType } from '../../types';
-import { apiDeleteGanList, apiDownloadPkl, apiUpdateGanList } from '../../api';
+import {
+	apiDeleteGanList,
+	apiDownloadPkl,
+	apiUpdateGanList,
+	imageURL,
+} from '../../api';
 import TrainImageModal from './TrainImageModal';
 
 const ModalBox = styled(Paper)`
@@ -143,13 +148,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 			return <img src={uploadedImage.preview} alt='' />;
 		}
 		if (model?.image) {
-			return (
-				<img
-					src={`http://k6s106.p.ssafy.io:8010/api/images/${model?.image}`}
-					alt=''
-					width='100%'
-				/>
-			);
+			return <img src={`${imageURL}${model?.image}`} alt='' width='100%' />;
 		}
 		return (
 			<Container
@@ -243,11 +242,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 						<>
 							<ImageBox>
 								{model?.image ? (
-									<img
-										src={`http://k6s106.p.ssafy.io:8010/api/images/${model?.image}`}
-										alt=''
-										width='100%'
-									/>
+									<img src={`${imageURL}${model?.image}`} alt='' width='100%' />
 								) : (
 									<Container
 										sx={{

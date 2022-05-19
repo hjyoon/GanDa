@@ -42,6 +42,8 @@ export interface ModelType extends ModelValueType {
 export interface CreateGanParamsType {
 	name: string;
 	description: string;
+	fid: number;
+	kimg: number;
 	formData: FormData;
 }
 
