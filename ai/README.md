@@ -38,3 +38,10 @@ $ python setup.py
 # 서버 실행
 $ uvicorn main:app --host 0.0.0.0 --port 8010
 ```
+
+
+
+# 학습하는 방법
+
+* 학습에 gpu서버를 필요로 하므로 colab에서 실행이 가능하도록 ipynb파일로 정리했습니다.
+* 해당 파일을 활용하여 colab에서 실행해보시길 바랍니다.
