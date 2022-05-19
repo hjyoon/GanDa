@@ -119,7 +119,6 @@ function Generation() {
 		{} as UploadedFileType
 	);
 	const [pklSelected, setPklSelected] = useState<File>();
-	const [imgSelected, setImgSelected] = useState<File>();
 	const onDrop = useCallback((acceptedFiles: any) => {
 		URL.revokeObjectURL(uploadedImage.preview || '');
 		setUploadedImage(
@@ -134,23 +133,20 @@ function Generation() {
 		onDrop,
 	});
 
-	const handleImage = (value: File) => {
-		setImgSelected(value);
-	};
-
 	const handlePklModify = async () => {
 		setUploading(true);
 		try {
 			const { name, description, fid, kimg } = getValues();
 			const formData = new FormData();
-			if (imgSelected) {
-				formData.append('img', imgSelected, imgSelected.name);
+			if (uploadedImage) {
+				formData.append('img', uploadedImage, uploadedImage.name);
 			}
 			if (pklSelected) {
 				formData.append('pkl_file', pklSelected, pklSelected.name);
 				await apiCreateGanList({ name, description, fid, kimg, formData });
 				// window.location.reload();
 				handleUploadModalClose();
+				getGanList();
 			}
 		} catch (error) {
 			// console.dir(error);
@@ -169,7 +165,6 @@ function Generation() {
 		setValue('fid', null);
 		setValue('kimg', null);
 		setPklSelected({} as File);
-		setImgSelected({} as File);
 		setUploadedImage({} as UploadedFileType);
 		setUploadModalShown(false);
 	};
@@ -345,18 +340,8 @@ function Generation() {
 			<Dialog open={isUploadModalShown} onClose={handleUploadModalClose}>
 				<DialogContent>
 					<ImageBox {...getRootProps()}>
-						<>
-							<input
-								{...getInputProps()}
-								{...register('image')}
-								onChange={e => {
-									const fileList = e.target.files;
-									if (!fileList) return;
-									handleImage(fileList[0]);
-								}}
-							/>
-							{formImage()}
-						</>
+						<input {...getInputProps()} {...register('image')} />
+						{formImage()}
 					</ImageBox>
 					<Box
 						component='form'
@@ -401,7 +386,7 @@ function Generation() {
 							sx={{ margin: 2 }}
 						/>
 						<Button variant='contained' component='label' sx={{ marginX: 2 }}>
-							{pklSelected ? pklSelected?.name : 'pkl 파일 업로드'}
+							{pklSelected?.name ? pklSelected?.name : 'pkl 파일 업로드'}
 							<input
 								name='pkl'
 								type='file'

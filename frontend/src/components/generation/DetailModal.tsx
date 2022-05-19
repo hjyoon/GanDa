@@ -135,9 +135,10 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 
 	const deleteModel = async (modelId: string) => {
 		try {
-			apiDeleteGanList(modelId);
+			await apiDeleteGanList(modelId);
 			setDeleteTarget({} as ModelType);
 			setTarget({} as ModelType);
+			getGanList();
 		} catch (e) {
 			// error
 		}
