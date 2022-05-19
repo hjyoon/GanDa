@@ -9,8 +9,8 @@ function Router() {
 		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Index />}>
-					<Route index element={<Main />} />
-					<Route path='main' element={<MainGumi />} />
+					<Route path='main' element={<Main />} />
+					<Route index element={<MainGumi />} />
 					<Route path='generate' element={<Generation />} />
 				</Route>
 			</Routes>
