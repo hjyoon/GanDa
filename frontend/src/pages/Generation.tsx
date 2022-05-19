@@ -26,13 +26,7 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ImageIcon from '@mui/icons-material/Image';
 import Divider from '../components/common/Divider';
 import { ModelType, ModelValueType, UploadedFileType } from '../types';
-import {
-	apiCreateGanList,
-	apiGetGan,
-	apiGetGanList,
-	apiUploadModel,
-	imageURL,
-} from '../api';
+import { apiCreateGanList, apiGetGan, apiGetGanList, imageURL } from '../api';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
