@@ -72,7 +72,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 	const onDrop = useCallback((acceptedFiles: any) => {
 		URL.revokeObjectURL(uploadedImage.preview || '');
 		setUploadedImage(
-			Object.assign(acceptedFiles, {
+			Object.assign(acceptedFiles[0], {
 				preview: URL.createObjectURL(new Blob(acceptedFiles)),
 			})
 		);
@@ -98,9 +98,8 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 		try {
 			// api
 			const formData = new FormData();
-			const { name, description, image } = getValues();
-			formData.append('img', image[0]);
-			formData.append('enctype', 'multipart/form-data');
+			const { name, description } = getValues();
+			formData.append('img', uploadedImage);
 			await apiUpdateGanList({
 				dataId: model?.id,
 				name,
@@ -109,7 +108,6 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 			});
 			initState();
 			getGanList();
-			// change model
 		} catch (e) {
 			// error
 		}

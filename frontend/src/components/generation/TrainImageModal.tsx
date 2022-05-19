@@ -87,7 +87,7 @@ function TrainImageModal({ target, setTarget }: UploadTrainImageModalPropType) {
 				<IconButton onClick={() => setPage(page - 1)} disabled={page <= 1}>
 					<ArrowBackIosNewIcon />
 				</IconButton>
-				<SubImageList sx={{ width: 300, height: 68 }} cols={4}>
+				<SubImageList sx={{ width: 300, height: 68, overflow: 'hidden' }} cols={4}>
 					{subImages.slice((page - 1) * 4, page * 4).map(image => (
 						<Button key={image} onClick={() => changeMainImage(image)}>
 							<ImageListItem>

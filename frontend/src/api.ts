@@ -43,9 +43,10 @@ export const apiUpdateGanList = ({
 	description,
 	formData,
 }: UpdateGanParamsType) =>
-	api.patch(`/data-list/${dataId}/?name=${name}&description=${description}`, {
-		data: formData,
-	});
+	api.patch(
+		`/data-list/${dataId}/?name=${name}&description=${description}`,
+		formData
+	);
 
 export const apiUpdatePklName = ({ dataId, name }: UpdatePklNameType) =>
 	api.patch(`/pkl/rename/${dataId}/`, {
