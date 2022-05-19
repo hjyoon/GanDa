@@ -43,7 +43,7 @@ async def upload_train_image(
     files = []
     if os.path.isdir("tmp"):
         shutil.rmtree("tmp")
-        os.mkdir("tmp")
+    os.mkdir("tmp")
     for image in images:
         img_content = await image.read()
         img_path = f"tmp/{image.filename}"
