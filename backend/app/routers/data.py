@@ -4,7 +4,8 @@ from typing import Optional
 
 from fastapi import (
     UploadFile,
-    APIRouter
+    APIRouter,
+    Query,
 )
 from fastapi.responses import Response
 
@@ -35,6 +36,8 @@ async def create_data_list(
     name: Optional[str] = None, 
     img: Optional[UploadFile] = None,
     description: Optional[str] = None,
+    fid: Optional[float] = Query(default=None, gt=0),
+    kimg: Optional[int] = Query(default=None, gt=0),
 ):
     setup()
     pkl_content = await pkl_file.read()
@@ -57,7 +60,9 @@ async def create_data_list(
         }
     params = {
         'name' : name,
-        'description' : description
+        'description' : description,
+        'fid': fid,
+        'kimg': kimg,
     }
     url = f"{BASE_URL}{model_url}"
     data = requests.post(url, params=params, files=files)
@@ -74,6 +79,8 @@ async def update_data(
     name: Optional[str] = None, 
     img: Optional[UploadFile] = None,
     description: Optional[str] = None,
+    fid: Optional[float] = Query(default=None, gt=0),
+    kimg: Optional[int] = Query(default=None, gt=0),
 ):
     setup()
     if img is None:
@@ -90,7 +97,9 @@ async def update_data(
         }
     params = {
         'name' : name,
-        'description' : description
+        'description' : description,
+        'fid': fid,
+        'kimg': kimg,
     }
     url = f"{BASE_URL}{model_url}{data_id}/"
     data = requests.patch(url, params=params, files=files)
