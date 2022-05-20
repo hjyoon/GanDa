@@ -19,3 +19,5 @@ services:
     build:
       context: .
       dockerfile: ./docker/fastapi/Dockerfile
+    volumes:
+      - /home/gitlab-runner/images:/code/app/static/images
