@@ -6,7 +6,7 @@
 ```
 SSAFY 6기의 구미 기업연계반, 🍇구미구미 마이구미 팀🍇입니다.
 
-**GAN**을 활용한 AI 학습용 이미지 생성 시스템 개발 with 삼성전기, **Gan-Da**를 개발합니다.
+GAN을 활용한 AI 학습용 이미지 생성 시스템 개발 with 삼성전기, Gan-Da를 개발합니다.
 ```
 
 ## 주요기능
@@ -52,9 +52,9 @@ SSAFY 6기의 구미 기업연계반, 🍇구미구미 마이구미 팀🍇입�
 
 [AI](ai/README.md)
 
-[BACKEND(backend/README.md)
+[BACKEND](backend/README.md)
 
-[FRONTEND(frontend/README.md)
+[FRONTEND](frontend/README.md)
 
 ## 서비스 소개 페이지
 
