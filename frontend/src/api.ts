@@ -2,6 +2,7 @@ import axios from 'axios';
 import FileSaver from 'file-saver';
 import {
 	CreateGanParamsType,
+	GetGanMultipleParamsType,
 	UpdateGanParamsType,
 	UpdatePklNameType,
 	UploadTrainImageType,
@@ -18,6 +19,17 @@ export const apiGetGan = (dataId: string) =>
 	api.get(`/gen-image/${dataId}/`, {
 		responseType: 'arraybuffer',
 	});
+
+export const apiGetGanMultiple = ({
+	dataId,
+	count,
+}: GetGanMultipleParamsType) =>
+	api
+		.get(`/gen-image/${dataId}/?count=${count}`, {
+			responseType: 'blob',
+		})
+		.then(res => FileSaver.saveAs(res.data, `${new Date().toJSON()}.zip`));
+// .then(res => console.log(res));
 
 export const apiGetGanList = () => api.get('/data-list/');
 

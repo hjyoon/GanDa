@@ -26,7 +26,13 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ImageIcon from '@mui/icons-material/Image';
 import Divider from '../components/common/Divider';
 import { ModelType, ModelValueType, UploadedFileType } from '../types';
-import { apiCreateGanList, apiGetGan, apiGetGanList, imageURL } from '../api';
+import {
+	apiCreateGanList,
+	apiGetGan,
+	apiGetGanMultiple,
+	apiGetGanList,
+	imageURL,
+} from '../api';
 import ScrollableContainer from '../components/common/ScrollableContainer';
 import DownloadModal from '../components/DownloadModal';
 import LoadingModal from '../components/common/LoadingModal';
@@ -93,9 +99,15 @@ const ButtonContainer = styled('div')`
 	display: flex;
 	flex-direction: column;
 
-	button {
+	& > button {
 		margin-top: 20px;
 		width: 300px;
+	}
+`;
+
+const CountField = styled(TextField)`
+	input {
+		padding: 7px 15px;
 	}
 `;
 
@@ -213,6 +225,20 @@ function Generation() {
 				setPage(Math.ceil((oldImages.length + 1) / 4));
 				return oldImages.concat(file);
 			});
+		} catch (e) {
+			// error
+		}
+		setGenerating(false);
+	}, []);
+
+	const getMultipleImage = useCallback(async (Model: string) => {
+		setGenerating(true);
+		try {
+			// api
+			const { count } = getValues();
+			if (count > 0 && count < 3) {
+				await apiGetGanMultiple({ dataId: Model, count });
+			}
 		} catch (e) {
 			// error
 		}
@@ -393,7 +419,12 @@ function Generation() {
 								}}
 							/>
 						</Button>
-						<Button onClick={handlePklModify} variant='contained' sx={{ margin: 2 }}>
+						<Button
+							onClick={handlePklModify}
+							variant='contained'
+							sx={{ margin: 2 }}
+							disabled={!pklSelected?.name}
+						>
 							업로드
 						</Button>
 						<Button
@@ -449,6 +480,23 @@ function Generation() {
 						>
 							생성 하기
 						</Button>
+						<Box sx={{ display: 'flex', marginTop: '20px' }}>
+							<CountField
+								type='number'
+								{...register('count')}
+								inputProps={{ max: '2', min: '1', step: '1', defaultValue: '1' }}
+								label='COUNT'
+								sx={{ width: '50%' }}
+							/>
+							<Button
+								variant='contained'
+								onClick={() => getMultipleImage(currentModel.id)}
+								disabled={isGenerating}
+								sx={{ width: '50%' }}
+							>
+								다중 생성 하기
+							</Button>
+						</Box>
 						<Button
 							variant='contained'
 							onClick={() => setModalShown(true)}

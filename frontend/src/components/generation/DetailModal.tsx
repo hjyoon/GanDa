@@ -91,7 +91,7 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 		setValue('name', model.name);
 		setValue('description', model.description);
 		setValue('fid', model.fid);
-		setValue('kimg', model.description);
+		setValue('kimg', model.kimg);
 	}, [isUpdating]);
 
 	const initState = () => {
@@ -328,13 +328,13 @@ function DetailModal({ model, setTarget, getGanList }: DetailModalPropType) {
 									sx={{ marginRight: 1 }}
 									onClick={() => deleteModel(deleteTarget?.id)}
 								>
-									Delete
+									삭제
 								</Button>
 								<Button
 									variant='contained'
 									onClick={() => setDeleteTarget({} as ModelType)}
 								>
-									Cancel
+									취소
 								</Button>
 							</Container>
 						</DeleteModalBox>

@@ -39,6 +39,11 @@ export interface ModelType extends ModelValueType {
 	id: string;
 }
 
+export interface GetGanMultipleParamsType {
+	dataId: string;
+	count: number;
+}
+
 export interface CreateGanParamsType {
 	name: string;
 	description: string;
