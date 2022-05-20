@@ -29,15 +29,15 @@ $ bash main.bash
 ## conda 가상환경 설정 후 수동으로 실행
 ```bash
 # conda 가상환경 생성
-$ conda env create -f enviroment.yml
+conda env create -f enviroment.yml
 # StyleGAN3 + FastAPI을 clone 받은 경우 stylegan3-fastapi
-$ conda activate stylegan3
+conda activate stylegan3
 # pip install
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 # 디렉터리 생성
-$ python setup.py
+python setup.py
 # 서버 실행
-$ uvicorn main:app --host 0.0.0.0 --port 8010
+uvicorn main:app --host 0.0.0.0 --port 8010
 ```
 
 # 학습하는 방법
