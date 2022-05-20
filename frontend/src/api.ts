@@ -42,10 +42,14 @@ export const apiCreateGanList = ({
 	kimg,
 	formData,
 }: CreateGanParamsType) =>
-	api.post(
-		`/data-list/?name=${name}&description=${description}&fid=${fid}&kimg=${kimg}`,
-		formData
-	);
+	api.post('/data-list/', formData, {
+		params: {
+			name,
+			description,
+			fid,
+			kimg,
+		},
+	});
 
 export const apiDeleteGanList = (dataId: string) =>
 	api.delete(`/data-list/${dataId}/`);
@@ -58,10 +62,14 @@ export const apiUpdateGanList = ({
 	kimg,
 	formData,
 }: UpdateGanParamsType) =>
-	api.patch(
-		`/data-list/${dataId}/?name=${name}&description=${description}&fid=${fid}&kimg=${kimg}`,
-		formData
-	);
+	api.patch(`/data-list/${dataId}/`, formData, {
+		params: {
+			name,
+			description,
+			fid,
+			kimg,
+		},
+	});
 
 export const apiUpdatePklName = ({ dataId, name }: UpdatePklNameType) =>
 	api.patch(`/pkl/rename/${dataId}/`, {

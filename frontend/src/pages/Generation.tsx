@@ -144,8 +144,17 @@ function Generation() {
 		try {
 			const { name, description, fid, kimg } = getValues();
 			const formData = new FormData();
-			if (uploadedImage) {
+			if (uploadedImage?.name) {
 				formData.append('img', uploadedImage, uploadedImage.name);
+			} else {
+				const url = 'https://k6s106.p.ssafy.io/api/base/ganda.jpg';
+				const res = await fetch(url);
+				const data = await res.blob();
+				const ext = url.split('.').pop();
+				const filename = url.split('/').pop();
+				const metadata = { type: `image/${ext}` };
+				const file = new File([data], filename!, metadata);
+				formData.append('img', file);
 			}
 			if (pklSelected) {
 				formData.append('pkl_file', pklSelected, pklSelected.name);
