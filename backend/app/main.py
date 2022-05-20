@@ -41,3 +41,8 @@ app.mount(
     StaticFiles(directory=f"{BASE_DIR}static/images/"),
     name="images"
 )
+app.mount(
+    "/api/base/",
+    StaticFiles(directory=f"{BASE_DIR}base_images/"),
+    name="base_images"
+)
